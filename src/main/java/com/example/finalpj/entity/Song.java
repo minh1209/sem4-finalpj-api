@@ -42,7 +42,7 @@ public class Song {
     @JsonIgnoreProperties("songs")
     private Category category;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("song")
-    private Transaction transaction;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JsonIgnoreProperties("song")
+//    private Transaction transaction;
 }
