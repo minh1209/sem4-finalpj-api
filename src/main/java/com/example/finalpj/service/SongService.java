@@ -31,10 +31,25 @@ public class SongService {
         return songRepository.findAll(pageable).getContent();
     }
 
-    public List<SongDTO> findAllByStatus(int page, int size) {
+    public List<Song> findAllByStatus(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
         return songRepository.findAllByStatus(true,pageable);
 //        return songMapper.toSongDTOs(songRepository.findAllByStatus(true,pageable));
+    }
+
+    public List<Song> findAllByCreatorId(int page, int size, String id) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
+        return songRepository.findAllByCreatorId(id, pageable);
+    }
+
+    public List<Song> findAllByCreatorIdAndStatus(int page, int size, String id) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
+        return songRepository.findAllByCreatorIdAndStatus(id, true,pageable);
+    }
+
+    public List<Song> findAllByCategoryIdAndStatus(int page, int size, String id) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
+        return songRepository.findAllByCategoryIdAndStatus(id, true,pageable);
     }
 
     public Optional<Song> findById(String id) {
