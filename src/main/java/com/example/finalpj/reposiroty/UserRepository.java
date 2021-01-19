@@ -10,8 +10,9 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findByEmail(String email);
+
     @Query(value = "select distinct u from User u join u.songs s where s.status = false order by size(s) desc")
-    List<User> findTop20UserGetPaid();
+    List<User> findTop20UserGetPaid(Pageable pageable);
 
 //    @Query(value = "select u from User u join u.songs s order by ")
 //    List<User> findAllCustom(Pageable pageable);

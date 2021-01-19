@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -21,9 +22,13 @@ public class Song {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
 
+    @NotBlank
     private String name;
 //    private String description;
+
+    @NotBlank
     private BigDecimal price;
+
 //    private Integer listenCount = 0;
     private boolean status = true;
 

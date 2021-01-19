@@ -1,6 +1,5 @@
 package com.example.finalpj.reposiroty;
 
-import com.example.finalpj.dto.SongDTO;
 import com.example.finalpj.entity.Song;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

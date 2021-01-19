@@ -37,7 +37,8 @@ public class UserService {
 //    }
 
     public List<User> findTop20UserGetPaid() {
-        return userRepository.findTop20UserGetPaid();
+        Pageable pageable = PageRequest.of(0, 20);
+        return userRepository.findTop20UserGetPaid(pageable);
     }
 
     public void deleteById(String id) {

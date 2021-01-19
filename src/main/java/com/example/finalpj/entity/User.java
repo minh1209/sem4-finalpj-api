@@ -25,16 +25,18 @@ public class User {
     @NotBlank
     @Email
     private String email;
-    @Size(min = 6, message = "Minimum 6 characters")
+
+    @Size(min = 6)
     @Column(length = 10485760)
     private String password;
 
+    @Size(min = 6, max = 32)
     private String name;
+
     @DateTimeFormat
     private Date dob;
     private String phone;
     private String identification;
-//    private Integer active = 0;
     private Boolean active = false;
     private String avatar;
 
