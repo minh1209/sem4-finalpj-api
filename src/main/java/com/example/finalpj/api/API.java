@@ -215,16 +215,12 @@ public class API {
                                      @RequestParam(required = false, defaultValue = "10") int size) {
         result = new HashMap<>();
         result.put("message", "ok");
-        result.put("data", songService.findAllByStatus(page, size));
+        result.put("data", songService.findAll(page, size));
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/song/get")
-    public ResponseEntity<?> getSong(@RequestParam(required = false) String id,
-                                     @RequestParam(required = false) String creator_id,
-                                     @RequestParam(required = false) String category_id,
-                                     @RequestParam(required = false, defaultValue = "0") int page,
-                                     @RequestParam(required = false, defaultValue = "10") int size) {
+    public ResponseEntity<?> getSong(@RequestParam(required = false) String id) {
         result = new HashMap<>();
         if(!id.isEmpty()) {
             Optional<Song> song = songService.findById(id);
@@ -235,32 +231,6 @@ public class API {
                 result.put("data", song.get());
             }
         }
-        if(!creator_id.isEmpty()) {
-            if(songService.findAllByCreatorIdAndStatus(page, size, creator_id).isEmpty()) {
-                result.put("message", "Người dùng chưa có beat nào.");
-            } else {
-                result.put("message", "ok");
-                result.put("data", songService.findAllByCreatorIdAndStatus(page, size, creator_id));
-            }
-        }
-        if(!category_id.isEmpty()) {
-            if(songService.findAllByCategoryIdAndStatus(page, size, category_id).isEmpty()) {
-                result.put("message", "Thể loại chưa có beat nào.");
-            } else {
-                result.put("message", "ok");
-                result.put("data", songService.findAllByCategoryIdAndStatus(page, size, category_id));
-            }
-        }
-        return ResponseEntity.ok(result);
-    }
-
-    @GetMapping("/song/get-owner")
-    public ResponseEntity<?> getSongOwner(@RequestParam(required = false) String id,
-                                     @RequestParam(required = false, defaultValue = "0") int page,
-                                     @RequestParam(required = false, defaultValue = "10") int size) {
-        result = new HashMap<>();
-        result.put("message", "ok");
-        result.put("data", songService.findAllByCreatorId(page, size, id));
         return ResponseEntity.ok(result);
     }
 
