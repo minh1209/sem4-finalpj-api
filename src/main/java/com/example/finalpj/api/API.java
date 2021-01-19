@@ -29,7 +29,7 @@ import java.util.*;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/v2")
+@RequestMapping
 public class API {
     @Autowired
     private UserService userService;
@@ -435,7 +435,7 @@ public class API {
         try {
             Template t = template.getTemplate("email-verification.ftl");
             Map<String, String> map = new HashMap<>();
-            map.put("VERIFICATION_URL", URL + "/v1/user-verify?code=" + verificationCode);
+            map.put("VERIFICATION_URL", URL + "/user/verify?code=" + verificationCode);
             body = FreeMarkerTemplateUtils.processTemplateIntoString(t, map);
         } catch (IOException | TemplateException e) {
             e.printStackTrace();
