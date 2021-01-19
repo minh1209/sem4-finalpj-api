@@ -10,6 +10,7 @@ import java.util.Date;
 
 @Entity
 @Data
+@Table(name = "transactions")
 public class Transaction {
     @Id
     @GeneratedValue(generator = "uuid")

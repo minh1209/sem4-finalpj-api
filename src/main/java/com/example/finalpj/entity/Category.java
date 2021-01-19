@@ -12,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Data
+@Table(name = "categories")
 public class Category {
     @Id
     @GeneratedValue(generator = "uuid")

@@ -10,6 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Data
+@Table(name = "tokens")
 public class Token {
     @Id
     @GeneratedValue(generator = "uuid")

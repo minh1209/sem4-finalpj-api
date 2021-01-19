@@ -14,6 +14,7 @@ import java.util.Date;
 
 @Entity
 @Data
+@Table(name = "songs")
 public class Song {
     @Id
     @GeneratedValue(generator = "uuid")
