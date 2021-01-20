@@ -26,6 +26,6 @@ public class Transaction {
     private Song song;
 
     @ManyToOne
-    @JsonIgnoreProperties("transactions")
+    @JsonIgnoreProperties({"transactions", "songs"})
     private User customer;
 }

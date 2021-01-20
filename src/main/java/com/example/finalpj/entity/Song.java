@@ -41,7 +41,7 @@ public class Song {
     private Date createAt;
 
     @ManyToOne
-    @JsonIgnoreProperties("songs")
+    @JsonIgnoreProperties({"songs", "transactions"})
     private User creator;
 
     @ManyToOne
