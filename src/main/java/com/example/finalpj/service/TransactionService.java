@@ -43,4 +43,6 @@ public class TransactionService {
 
     @Transactional
     public void deleteAllByCustomerId(String id) { transactionRepository.deleteAllByCustomerId(id); }
+
+    public void deleteById(String id) {transactionRepository.deleteById(id);}
 }

@@ -291,19 +291,19 @@ public class API {
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping("/song/pay")
-    public ResponseEntity<?> paySong(@RequestParam String id) {
-        result = new HashMap<>();
-        Optional<Song> song = songService.findById(id);
-        if(!song.isPresent()) {
-            result.put("message", "Beat không tồn tại.");
-        } else {
-            song.get().setStatus(false);
-            result.put("message", "Thanh toán beat thành công.");
-            result.put("data", songService.save(song.get()));
-        }
-        return ResponseEntity.ok(result);
-    }
+//    @PutMapping("/song/pay")
+//    public ResponseEntity<?> paySong(@RequestParam String id) {
+//        result = new HashMap<>();
+//        Optional<Song> song = songService.findById(id);
+//        if(!song.isPresent()) {
+//            result.put("message", "Beat không tồn tại.");
+//        } else {
+//            song.get().setStatus(false);
+//            result.put("message", "Thanh toán beat thành công.");
+//            result.put("data", songService.save(song.get()));
+//        }
+//        return ResponseEntity.ok(result);
+//    }
 
     @GetMapping("/song/top-10")
     public ResponseEntity<?> getFirst10ByCreate() {
@@ -363,8 +363,16 @@ public class API {
     @PostMapping("/transaction/add")
     public ResponseEntity<?> addTransaction(@Valid @RequestBody Transaction t) {
         result = new HashMap<>();
-        result.put("message", "Xử lý giao dịch thành công.");
-        result.put("data", transactionService.save(t));
+        Optional<Song> song = songService.findById(transactionService.save(t).getSong().getId());
+        if(!song.isPresent()) {
+            transactionService.deleteById(t.getId());
+            result.put("message", "Giao dịch thất bại.");
+        } else {
+            song.get().setStatus(false);
+            songService.save(song.get());
+            result.put("message", "Xử lý giao dịch thành công.");
+        }
+
         return ResponseEntity.ok(result);
     }
 

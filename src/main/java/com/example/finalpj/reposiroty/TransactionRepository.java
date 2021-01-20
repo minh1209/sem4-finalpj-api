@@ -17,4 +17,5 @@ public interface TransactionRepository extends JpaRepository<Transaction, String
 //    List<TransactionDAO> findAllByCustomerIdCustom(String id, Pageable pageable);
 
     void deleteAllByCustomerId(String id);
+    void deleteById(String id);
 }
