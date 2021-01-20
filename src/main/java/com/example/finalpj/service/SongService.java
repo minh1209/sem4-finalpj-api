@@ -31,8 +31,8 @@ public class SongService {
         return songRepository.findById(id);
     }
 
-    public List<Song> findTop10ByOrderByCreateAtDesc() {
-        return songRepository.findTop10ByOrderByCreateAtDesc();
+    public List<Song> findTop6ByOrderByCreateAtDesc() {
+        return songRepository.findTop6ByOrderByCreateAtDesc();
     }
 
     @Transactional

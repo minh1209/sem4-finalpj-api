@@ -305,11 +305,11 @@ public class API {
 //        return ResponseEntity.ok(result);
 //    }
 
-    @GetMapping("/song/top-10")
+    @GetMapping("/song/top-6")
     public ResponseEntity<?> getFirst10ByCreate() {
         result = new HashMap<>();
         result.put("message", "ok");
-        result.put("data", songService.findTop10ByOrderByCreateAtDesc());
+        result.put("data", songService.findTop6ByOrderByCreateAtDesc());
         return ResponseEntity.ok(result);
     }
 
