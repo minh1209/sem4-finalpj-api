@@ -369,6 +369,7 @@ public class API {
             result.put("message", "Giao dịch thất bại.");
         } else {
             song.get().setStatus(false);
+            song.get().setTransaction(t);
             songService.save(song.get());
             result.put("message", "Xử lý giao dịch thành công.");
         }
