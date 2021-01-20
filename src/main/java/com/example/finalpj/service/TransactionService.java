@@ -32,14 +32,20 @@ public class TransactionService {
         return transactionRepository.findAll(pageable).getContent();
     }
 
-    public List<Transaction> findAllByCreateAtBetween(int page, int size, Date start, Date end) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
-        return transactionRepository.findAllByCreateAtBetween(start, end, pageable);
+//    public List<Transaction> findAllByCreateAtBetween(int page, int size, Date start, Date end) {
+//        Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
+//        return transactionRepository.findAllByCreateAtBetween(start, end, pageable);
+//    }
+    public List<Transaction> findAllByCreateAtBetween(Date start, Date end) {
+        return transactionRepository.findAllByCreateAtBetween(start, end);
     }
 
-    public List<Transaction> findAllBySong_Creator_IdAndCreateAtBetween(int page, int size, Date start, Date end, String id) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
-        return transactionRepository.findAllBySong_Creator_IdAndCreateAtBetween(id, start, end, pageable);
+//    public List<Transaction> findAllBySong_Creator_IdAndCreateAtBetween(int page, int size, Date start, Date end, String id) {
+//        Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
+//        return transactionRepository.findAllBySong_Creator_IdAndCreateAtBetween(id, start, end, pageable);
+//    }
+    public List<Transaction> findAllBySong_Creator_IdAndCreateAtBetween(Date start, Date end, String id) {
+        return transactionRepository.findAllBySong_Creator_IdAndCreateAtBetween(id, start, end);
     }
 
     public Transaction save(Transaction t) {

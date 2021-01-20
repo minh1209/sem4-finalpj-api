@@ -407,17 +407,15 @@ public class API {
     }
 
     @GetMapping("/admin/transaction/timefilter")
-    public ResponseEntity<?> findAllTransactionWithTimeFilter(@RequestParam(required = false, defaultValue = "0") int page,
-                                                             @RequestParam(required = false, defaultValue = "10") int size,
-                                                             @RequestParam(required = false) String id,
-                                                             @RequestParam @DateTimeFormat(pattern = "ddMMyyyy") Date start,
-                                                             @RequestParam @DateTimeFormat(pattern = "ddMMyyyy") Date end) {
+    public ResponseEntity<?> findAllTransactionWithTimeFilter(@RequestParam(required = false) String id,
+                                                             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date start,
+                                                             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date end) {
         result = new HashMap<>();
         result.put("message", "ok");
         if(id == null) {
-            result.put("data", transactionService.findAllByCreateAtBetween(page, size, start, end));
+            result.put("data", transactionService.findAllByCreateAtBetween(start, end));
         } else {
-            result.put("data", transactionService.findAllBySong_Creator_IdAndCreateAtBetween(page, size, start, end, id));
+            result.put("data", transactionService.findAllBySong_Creator_IdAndCreateAtBetween(start, end, id));
         }
         return ResponseEntity.ok(result);
     }
