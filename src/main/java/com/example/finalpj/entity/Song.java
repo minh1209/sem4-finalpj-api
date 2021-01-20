@@ -26,7 +26,7 @@ public class Song {
     private String name;
 //    private String description;
 
-    @NotBlank
+//    @NotBlank
     private BigDecimal price;
 
 //    private Integer listenCount = 0;
