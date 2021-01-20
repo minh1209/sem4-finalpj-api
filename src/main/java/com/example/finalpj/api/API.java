@@ -180,8 +180,24 @@ public class API {
         } else {
             u.setId(id);
             u.setCreateAt(user.get().getCreateAt());
+            u.setActive(user.get().getActive());
+            u.setPassword(user.get().getPassword());
             result.put("message", "Cập nhật thông tin thành công.");
             result.put("data", userService.save(u));
+        }
+        return ResponseEntity.ok(result);
+    }
+
+    @PutMapping("/user/edit-password")
+    public ResponseEntity<?> editUserPassword(@RequestParam String id, @RequestParam String password) {
+        result = new HashMap<>();
+        Optional<User> user = userService.findById(id);
+        if(!user.isPresent()) {
+            result.put("message", "Người dùng không tồn tại.");
+        } else {
+            user.get().setPassword(encoder().encode(password));
+            result.put("message", "Cập nhật mật khẩu thành công.");
+            result.put("data", userService.save(user.get()));
         }
         return ResponseEntity.ok(result);
     }
@@ -291,20 +307,6 @@ public class API {
         return ResponseEntity.ok(result);
     }
 
-//    @PutMapping("/song/pay")
-//    public ResponseEntity<?> paySong(@RequestParam String id) {
-//        result = new HashMap<>();
-//        Optional<Song> song = songService.findById(id);
-//        if(!song.isPresent()) {
-//            result.put("message", "Beat không tồn tại.");
-//        } else {
-//            song.get().setStatus(false);
-//            result.put("message", "Thanh toán beat thành công.");
-//            result.put("data", songService.save(song.get()));
-//        }
-//        return ResponseEntity.ok(result);
-//    }
-
     @GetMapping("/song/top-6")
     public ResponseEntity<?> getFirst10ByCreate() {
         result = new HashMap<>();
@@ -407,11 +409,16 @@ public class API {
     @GetMapping("/admin/transaction/timefilter")
     public ResponseEntity<?> findAllTransactionWithTimeFilter(@RequestParam(required = false, defaultValue = "0") int page,
                                                              @RequestParam(required = false, defaultValue = "10") int size,
-                                                             @RequestParam(required = false) @DateTimeFormat(pattern = "ddMMyyyy") Date start,
-                                                             @RequestParam(required = false) @DateTimeFormat(pattern = "ddMMyyyy") Date end) {
+                                                             @RequestParam(required = false) String id,
+                                                             @RequestParam @DateTimeFormat(pattern = "ddMMyyyy") Date start,
+                                                             @RequestParam @DateTimeFormat(pattern = "ddMMyyyy") Date end) {
         result = new HashMap<>();
         result.put("message", "ok");
-        result.put("data", transactionService.findAllByCreateAtBetween(page, size, start, end));
+        if(id == null) {
+            result.put("data", transactionService.findAllByCreateAtBetween(page, size, start, end));
+        } else {
+            result.put("data", transactionService.findAllBySong_Creator_IdAndCreateAtBetween(page, size, start, end, id));
+        }
         return ResponseEntity.ok(result);
     }
 

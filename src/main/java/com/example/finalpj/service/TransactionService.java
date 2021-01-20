@@ -37,6 +37,11 @@ public class TransactionService {
         return transactionRepository.findAllByCreateAtBetween(start, end, pageable);
     }
 
+    public List<Transaction> findAllBySong_Creator_IdAndCreateAtBetween(int page, int size, Date start, Date end, String id) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
+        return transactionRepository.findAllBySong_Creator_IdAndCreateAtBetween(id, start, end, pageable);
+    }
+
     public Transaction save(Transaction t) {
         return transactionRepository.save(t);
     }
