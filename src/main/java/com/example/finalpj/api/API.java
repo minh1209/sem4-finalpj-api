@@ -367,11 +367,13 @@ public class API {
         if(!song.isPresent()) {
             transactionService.deleteById(t.getId());
             result.put("message", "Giao dịch thất bại.");
+            result.put("status", false);
         } else {
             song.get().setStatus(false);
             song.get().setTransaction(t);
             songService.save(song.get());
             result.put("message", "Xử lý giao dịch thành công.");
+            result.put("status", true);
         }
 
         return ResponseEntity.ok(result);
