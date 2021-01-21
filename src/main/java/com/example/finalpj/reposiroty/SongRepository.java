@@ -9,6 +9,6 @@ import java.util.List;
 public interface SongRepository extends JpaRepository<Song, String> {
     List<Song> findAllByCreatorId(String id, Pageable pageable);
     void deleteAllByCreatorId(String id);
-    void deleteById(String id);
-    List<Song> findTop6ByOrderByCreateAtDesc();
+//    void deleteById(String id);
+    List<Song> findTop6ByStatusOrderByCreateAtDesc(Boolean status);
 }
