@@ -22,14 +22,14 @@ public class SongService {
         return songRepository.save(s);
     }
 
-//    public List<Song> findAll(int page, int size) {
-//        Pageable pageable = PageRequest.of(page, size, Sort.by("create_at").descending());
-//        return songRepository.findAll(pageable).getContent();
-//    }
-
-    public List<Song> findAllByOrderByCreateAtDesc() {
-        return songRepository.findAllByOrderByCreateAtDesc();
+    public List<Song> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
+        return songRepository.findAll(pageable).getContent();
     }
+
+//    public List<Song> findAllByOrderByCreateAtDesc() {
+//        return songRepository.findAllByOrderByCreateAtDesc();
+//    }
 
     public Optional<Song> findById(String id) {
         return songRepository.findById(id);

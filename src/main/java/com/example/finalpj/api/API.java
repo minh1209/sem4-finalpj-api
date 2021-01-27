@@ -228,12 +228,12 @@ public class API {
 
     //  Song------------------------------------------------------------------------------------------------------------
     @GetMapping("/song/all")
-//    public ResponseEntity<?> findAllSong(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size) {
-    public ResponseEntity<?> findAllSong() {
+    public ResponseEntity<?> findAllSong(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size) {
+//    public ResponseEntity<?> findAllSong() {
         result = new HashMap<>();
         result.put("message", "ok");
-//        result.put("data", songService.findAll(page, size));
-        result.put("data", songService.findAllByOrderByCreateAtDesc());
+        result.put("data", songService.findAll(page, size));
+//        result.put("data", songService.findAllByOrderByCreateAtDesc());
         return ResponseEntity.ok(result);
     }
 
