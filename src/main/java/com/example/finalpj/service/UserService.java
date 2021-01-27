@@ -5,6 +5,7 @@ import com.example.finalpj.reposiroty.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -38,14 +39,14 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-//    public List<User> findTop20ByOrderByCreateAtDesc() {
-//        return userRepository.findTop20ByOrderByCreateAtDesc();
-//    }
+    public List<User> findTop20ByOrderByCreateAtDesc() {
+        return userRepository.findAll();
+    }
 
-//    public List<User> findTop20UserGetPaid() {
-//        Pageable pageable = PageRequest.of(0, 20);
-//        return userRepository.findTop20UserGetPaid(, pageable);
-//    }
+    public List<User> findTop20UserGetPaid() {
+        Pageable pageable = PageRequest.of(0, 20);
+        return userRepository.findTop20UserGetPaid(pageable);
+    }
 
     public void deleteById(String id) {
         userRepository.deleteById(id);

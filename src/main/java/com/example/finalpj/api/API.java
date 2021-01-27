@@ -217,13 +217,14 @@ public class API {
         return ResponseEntity.ok(result);
     }
 
-//    @GetMapping("/user/top-20")
-//    public ResponseEntity<?> getTop20() {
-//        result = new HashMap<>();
-//        result.put("message", "ok");
-//        result.put("data", userService.findTop20UserGetPaid());
-//        return ResponseEntity.ok(result);
-//    }
+    @GetMapping("/user/top-20")
+    public ResponseEntity<?> getTop20() {
+        result = new HashMap<>();
+        result.put("message", "ok");
+        result.put("data", userService.findTop20UserGetPaid());
+        return ResponseEntity.ok(result);
+    }
+
 
 
     //  Song------------------------------------------------------------------------------------------------------------
