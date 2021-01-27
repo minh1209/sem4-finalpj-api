@@ -46,18 +46,18 @@ public class User {
     @CreationTimestamp
     private Date createAt;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "user_role")
     @JsonIgnoreProperties("users")
     private List<Role> roles;
 
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("creator")
-    @OrderBy("createAt desc")
+    @OrderBy("create_at desc")
     private List<Song> songs;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("customer")
-    @OrderBy("createAt desc")
+    @OrderBy("create_at desc")
     private List<Transaction> transactions;
 }

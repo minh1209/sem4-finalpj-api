@@ -7,6 +7,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,9 +21,13 @@ public class UserService {
         return userRepository.save(u);
     }
 
-    public List<User> findAll(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return userRepository.findAll(pageable).getContent();
+//    public List<User> findAll(int page, int size) {
+//        Pageable pageable = PageRequest.of(page, size);
+//        return userRepository.findAll(pageable).getContent();
+//    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
     public Optional<User> findById(String id) {
@@ -36,10 +42,10 @@ public class UserService {
 //        return userRepository.findTop20ByOrderByCreateAtDesc();
 //    }
 
-    public List<User> findTop20UserGetPaid() {
-        Pageable pageable = PageRequest.of(0, 20);
-        return userRepository.findTop20UserGetPaid(pageable);
-    }
+//    public List<User> findTop20UserGetPaid() {
+//        Pageable pageable = PageRequest.of(0, 20);
+//        return userRepository.findTop20UserGetPaid(, pageable);
+//    }
 
     public void deleteById(String id) {
         userRepository.deleteById(id);

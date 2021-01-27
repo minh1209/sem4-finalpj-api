@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -27,8 +28,8 @@ public class Song {
 //    @NotBlank
     private BigDecimal price;
 
-//    private Integer listenCount = 0;
-    private boolean status = true;
+    private Integer payment_count = 0;
+//    private boolean status = true;
 
     private String main;
     private String demo;
@@ -46,7 +47,8 @@ public class Song {
     @JsonIgnoreProperties("songs")
     private Category category;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "song", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("song")
-    private Transaction transaction;
+    @OrderBy("create_at desc")
+    private List<Transaction> transactions;
 }

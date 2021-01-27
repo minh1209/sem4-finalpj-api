@@ -54,11 +54,12 @@ public class API {
 
     //  User------------------------------------------------------------------------------------------------------------
     @GetMapping("/user/all")
-    public ResponseEntity<?> findAllUser(@RequestParam(required = false, defaultValue = "0") int page,
-                                     @RequestParam(required = false, defaultValue = "10") int size) {
+//    public ResponseEntity<?> findAllUser(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size) {
+    public ResponseEntity<?> findAllUser(){
         result = new HashMap<>();
         result.put("message", "ok");
-        result.put("data", userService.findAll(page, size));
+//        result.put("data", userService.findAll(page, size));
+        result.put("data", userService.findAll());
         return ResponseEntity.ok(result);
     }
 
@@ -216,22 +217,23 @@ public class API {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/user/top-20")
-    public ResponseEntity<?> getTop20() {
-        result = new HashMap<>();
-        result.put("message", "ok");
-        result.put("data", userService.findTop20UserGetPaid());
-        return ResponseEntity.ok(result);
-    }
+//    @GetMapping("/user/top-20")
+//    public ResponseEntity<?> getTop20() {
+//        result = new HashMap<>();
+//        result.put("message", "ok");
+//        result.put("data", userService.findTop20UserGetPaid());
+//        return ResponseEntity.ok(result);
+//    }
 
 
     //  Song------------------------------------------------------------------------------------------------------------
     @GetMapping("/song/all")
-    public ResponseEntity<?> findAllSong(@RequestParam(required = false, defaultValue = "0") int page,
-                                     @RequestParam(required = false, defaultValue = "10") int size) {
+//    public ResponseEntity<?> findAllSong(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size) {
+    public ResponseEntity<?> findAllSong() {
         result = new HashMap<>();
         result.put("message", "ok");
-        result.put("data", songService.findAll(page, size));
+//        result.put("data", songService.findAll(page, size));
+        result.put("data", songService.findAllByOrderByCreateAtDesc());
         return ResponseEntity.ok(result);
     }
 
@@ -261,6 +263,7 @@ public class API {
         } else {
             s.setId(id);
             s.setCreateAt(song.get().getCreateAt());
+            s.setPayment_count(song.get().getPayment_count());
             result.put("message", "Cập nhật thông tin thành công.");
             result.put("data", songService.save(s));
         }
@@ -311,9 +314,10 @@ public class API {
     public ResponseEntity<?> getFirst6ByCreate() {
         result = new HashMap<>();
         result.put("message", "ok");
-        result.put("data", songService.findTop6ByStatusOrderByCreateAtDesc());
+        result.put("data", songService.findTop6ByOrderByCreate_atDesc());
         return ResponseEntity.ok(result);
     }
+
 
 
     //  Category--------------------------------------------------------------------------------------------------------
@@ -353,26 +357,35 @@ public class API {
 
     //  Transaction-----------------------------------------------------------------------------------------------------
     @GetMapping("/transaction/customer")
-    public ResponseEntity<?> getAllTransactionWithCustomer(@RequestParam(required = false, defaultValue = "0") int page,
-                                                @RequestParam(required = false, defaultValue = "10") int size,
-                                                @RequestParam String id) {
+//    public ResponseEntity<?> getAllTransactionWithCustomer(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size, @RequestParam String id) {
+    public ResponseEntity<?> getAllTransactionWithCustomer(@RequestParam String id) {
         result = new HashMap<>();
         result.put("message", "ok");
-        result.put("data", transactionService.findAllByCustomerId(page, size, id));
+//        result.put("data", transactionService.findAllByCustomerId(page, size, id));
+        result.put("data", transactionService.findAllByCustomerIdOrderByCreateAtDesc(id));
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/transaction/song")
+//    public ResponseEntity<?> getAllTransactionWithSong(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size, @RequestParam String id) {
+    public ResponseEntity<?> getAllTransactionWithSong(@RequestParam String id) {
+        result = new HashMap<>();
+        result.put("message", "ok");
+//        result.put("data", transactionService.findAllBySongId(page, size, id));
+        result.put("data", transactionService.findAllBySongIdOrderByCreateAtDesc(id));
         return ResponseEntity.ok(result);
     }
 
     @PostMapping("/transaction/add")
     public ResponseEntity<?> addTransaction(@Valid @RequestBody Transaction t) {
         result = new HashMap<>();
-        Optional<Song> song = songService.findById(transactionService.save(t).getSong().getId());
+        Optional<Song> song = songService.findById(t.getSong().getId());
         if(!song.isPresent()) {
-            transactionService.deleteById(t.getId());
             result.put("message", "Giao dịch thất bại.");
             result.put("status", false);
         } else {
-            song.get().setStatus(false);
-            song.get().setTransaction(t);
+            transactionService.save(t);
+            song.get().setPayment_count(song.get().getPayment_count() + 1);
             songService.save(song.get());
             result.put("message", "Xử lý giao dịch thành công.");
             result.put("status", true);
@@ -398,24 +411,23 @@ public class API {
     }
 
     @GetMapping("/admin/transaction/all")
-    public ResponseEntity<?> findAllTransaction(@RequestParam(required = false, defaultValue = "0") int page,
-                                               @RequestParam(required = false, defaultValue = "10") int size) {
+//    public ResponseEntity<?> findAllTransaction(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size) {
+    public ResponseEntity<?> findAllTransaction() {
         result = new HashMap<>();
         result.put("message", "ok");
-        result.put("data", transactionService.findAll(page, size));
+//        result.put("data", transactionService.findAll(page, size));
+        result.put("data", transactionService.findAll());
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/admin/transaction/timefilter")
-    public ResponseEntity<?> findAllTransactionWithTimeFilter(@RequestParam(required = false) String id,
-                                                             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date start,
-                                                             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date end) {
+    public ResponseEntity<?> findAllTransactionWithTimeFilter(@RequestParam(required = false) String id, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date start, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date end) {
         result = new HashMap<>();
         result.put("message", "ok");
         if(id == null) {
-            result.put("data", transactionService.findAllByCreateAtBetween(start, end));
+            result.put("data", transactionService.findAllByCreateAtBetweenOrderByCreateAtDesc(start, end));
         } else {
-            result.put("data", transactionService.findAllBySong_Creator_IdAndCreateAtBetween(start, end, id));
+            result.put("data", transactionService.findAllBySong_Creator_IdAndCreateAtBetweenOrderByCreateAtDesc(start, end, id));
         }
         return ResponseEntity.ok(result);
     }
