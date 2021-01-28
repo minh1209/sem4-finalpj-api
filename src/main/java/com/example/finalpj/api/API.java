@@ -427,6 +427,21 @@ public class API {
         return ResponseEntity.ok(result);
     }
 
+    @PutMapping("/admin/transaction/author-payment")
+    public ResponseEntity<?> updateAuthorPayment(@RequestParam String id) {
+        Optional<Transaction> transaction = transactionService.findById(id);
+        if(!transaction.isPresent()) {
+            result.put("message", "Giao dịch không tồn tại.");
+        } else if(transaction.get().getAuthorPayment()) {
+            result.put("message", "Giao dịch này đã được thanh toán cho nhạc sĩ.");
+        } else {
+            transaction.get().setAuthorPayment(true);
+            transactionService.save(transaction.get());
+            result.put("message", "Thanh toán cho nhạc sĩ thành công.");
+        }
+        return ResponseEntity.ok(result);
+    }
+
 
     //  Function--------------------------------------------------------------------------------------------------------
 

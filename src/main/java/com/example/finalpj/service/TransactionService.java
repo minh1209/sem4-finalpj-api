@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TransactionService {
@@ -39,6 +40,10 @@ public class TransactionService {
     public List<Transaction> findAllBySong_Creator_IdAndCreateAtBetweenOrderByCreateAtDesc(Date start, Date end, String id, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         return transactionRepository.findAllBySong_Creator_IdAndCreateAtBetweenOrderByCreateAtDesc(id, start, end, pageable);
+    }
+
+    public Optional<Transaction> findById(String id) {
+        return transactionRepository.findById(id);
     }
 
     public Transaction save(Transaction t) {
