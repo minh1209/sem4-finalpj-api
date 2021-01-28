@@ -17,7 +17,7 @@ public class Transaction {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
     private String payment;
-    private Boolean author_payment = false;
+    private Boolean authorPayment = false;
 
     @CreationTimestamp
     private Date createAt;
