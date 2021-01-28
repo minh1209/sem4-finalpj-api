@@ -358,22 +358,18 @@ public class API {
 
     //  Transaction-----------------------------------------------------------------------------------------------------
     @GetMapping("/transaction/customer")
-//    public ResponseEntity<?> getAllTransactionWithCustomer(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size, @RequestParam String id) {
-    public ResponseEntity<?> getAllTransactionWithCustomer(@RequestParam String id) {
+    public ResponseEntity<?> getAllTransactionWithCustomer(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size, @RequestParam String id) {
         result = new HashMap<>();
         result.put("message", "ok");
-//        result.put("data", transactionService.findAllByCustomerId(page, size, id));
-        result.put("data", transactionService.findAllByCustomerIdOrderByCreateAtDesc(id));
+        result.put("data", transactionService.findAllByCustomerIdOrderByCreateAtDesc(id, page, size));
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/transaction/song")
-//    public ResponseEntity<?> getAllTransactionWithSong(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size, @RequestParam String id) {
-    public ResponseEntity<?> getAllTransactionWithSong(@RequestParam String id) {
+    public ResponseEntity<?> getAllTransactionWithSong(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size, @RequestParam String id) {
         result = new HashMap<>();
         result.put("message", "ok");
-//        result.put("data", transactionService.findAllBySongId(page, size, id));
-        result.put("data", transactionService.findAllBySongIdOrderByCreateAtDesc(id));
+        result.put("data", transactionService.findAllBySongIdOrderByCreateAtDesc(id, page, size));
         return ResponseEntity.ok(result);
     }
 
@@ -412,23 +408,21 @@ public class API {
     }
 
     @GetMapping("/admin/transaction/all")
-//    public ResponseEntity<?> findAllTransaction(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size) {
-    public ResponseEntity<?> findAllTransaction() {
+    public ResponseEntity<?> findAllTransaction(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size) {
         result = new HashMap<>();
         result.put("message", "ok");
-//        result.put("data", transactionService.findAll(page, size));
-        result.put("data", transactionService.findAll());
+        result.put("data", transactionService.findAll(page, size));
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/admin/transaction/timefilter")
-    public ResponseEntity<?> findAllTransactionWithTimeFilter(@RequestParam(required = false) String id, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date start, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date end) {
+    public ResponseEntity<?> findAllTransactionWithTimeFilter(@RequestParam(required = false) String id, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date start, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date end, @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size) {
         result = new HashMap<>();
         result.put("message", "ok");
         if(id == null) {
-            result.put("data", transactionService.findAllByCreateAtBetweenOrderByCreateAtDesc(start, end));
+            result.put("data", transactionService.findAllByCreateAtBetweenOrderByCreateAtDesc(start, end, page, size));
         } else {
-            result.put("data", transactionService.findAllBySong_Creator_IdAndCreateAtBetweenOrderByCreateAtDesc(start, end, id));
+            result.put("data", transactionService.findAllBySong_Creator_IdAndCreateAtBetweenOrderByCreateAtDesc(start, end, id, page, size));
         }
         return ResponseEntity.ok(result);
     }
