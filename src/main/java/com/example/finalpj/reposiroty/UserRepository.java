@@ -15,7 +15,7 @@ public interface UserRepository extends JpaRepository<User, String> {
 //    @Query(value = "select distinct u from User u join u.songs s where s.status = false order by size(s) desc")
 //    List<User> findTop20UserGetPaid(Pageable pageable);
 
-    @Query(value = "select u from User u join u.songs s group by u.id order by sum(s.payment_count) desc")
+    @Query(value = "select u from User u join u.songs s group by u.id order by sum(s.paymentCount) desc")
     List<User> findTop20UserGetPaid(Pageable pageable);
 
 //    @Query(value = "select u from User u join u.songs s order by ")
