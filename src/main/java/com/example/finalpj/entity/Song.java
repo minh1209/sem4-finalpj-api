@@ -47,7 +47,7 @@ public class Song {
     @JsonIgnoreProperties("songs")
     private Category category;
 
-    @OneToMany(mappedBy = "song", cascade = CascadeType.ALL)
+    @OneToMany
     @JsonIgnoreProperties("song")
     @OrderBy("create_at desc")
     private List<Transaction> transactions;

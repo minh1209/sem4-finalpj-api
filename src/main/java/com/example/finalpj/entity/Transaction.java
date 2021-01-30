@@ -23,7 +23,7 @@ public class Transaction {
     private Date createAt;
 
     @ManyToOne
-    @JsonIgnoreProperties("transaction")
+    @JsonIgnoreProperties("transactions")
     private Song song;
 
     @ManyToOne

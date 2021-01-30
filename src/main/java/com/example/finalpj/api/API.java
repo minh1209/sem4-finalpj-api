@@ -377,7 +377,8 @@ public class API {
     public ResponseEntity<?> addTransaction(@Valid @RequestBody Transaction t) {
         result = new HashMap<>();
         Optional<Song> song = songService.findById(t.getSong().getId());
-        if(!song.isPresent()) {
+        Optional<User> user = userService.findById(t.getCustomer().getId());
+        if(!song.isPresent() || !user.isPresent()) {
             result.put("message", "Giao dịch thất bại.");
             result.put("status", false);
         } else {
