@@ -264,7 +264,6 @@ public class API {
         } else {
             s.setId(id);
             s.setCreateAt(song.get().getCreateAt());
-            s.setPaymentCount(song.get().getPaymentCount());
             result.put("message", "Cập nhật thông tin thành công.");
             result.put("data", songService.save(s));
         }
@@ -384,8 +383,6 @@ public class API {
             result.put("status", false);
         } else {
             transactionService.save(t);
-            song.get().setPaymentCount(song.get().getPaymentCount() + 1);
-            songService.save(song.get());
             result.put("message", "Xử lý giao dịch thành công.");
             result.put("status", true);
         }

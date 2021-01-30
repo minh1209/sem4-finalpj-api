@@ -28,7 +28,6 @@ public class Song {
 //    @NotBlank
     private BigDecimal price;
 
-    private Integer paymentCount = 0;
 //    private boolean status = true;
 
     private String main;
