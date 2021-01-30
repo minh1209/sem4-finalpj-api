@@ -481,6 +481,8 @@ public class API {
                 token = new Token();
                 token.setUser(user.get());
                 tokenService.save(token);
+                user.get().setToken(token);
+                userService.save(user.get());
             } else {
                 if(findToken.get().getExpiredDateTime().isBefore(LocalDateTime.now())) {
                     token = new Token();
