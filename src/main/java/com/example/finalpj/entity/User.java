@@ -31,7 +31,7 @@ public class User {
     @Column(length = 10485760)
     private String password;
 
-    @Size(min = 6, max = 32)
+    @Size(min = 1, max = 32)
     private String name;
 
     @DateTimeFormat

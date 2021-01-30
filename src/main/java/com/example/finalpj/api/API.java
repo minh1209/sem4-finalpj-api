@@ -394,6 +394,33 @@ public class API {
 
 
     //  Admin-----------------------------------------------------------------------------------------------------------
+    @PostMapping("/admin/login")
+    public ResponseEntity<?> adminLogin(@RequestParam String email, @RequestParam String password) {
+        result = new HashMap<>();
+        boolean isAdmin = false;
+        Optional<User> user = userService.findByEmail(email);
+        if(!user.isPresent()) {
+            result.put("message", "Tài khoản không tồn tại.");
+        } else if (!user.get().getActive()) {
+            result.put("message", "Tài khoản chưa xác minh qua email.");
+        } else if (!encoder().matches(password, user.get().getPassword())) {
+            result.put("message", "Sai email hoặc mật khẩu.");
+        } else {
+            for(Role role: user.get().getRoles()) {
+                if(role.getName().equals("role_admin")) {
+                    isAdmin = true;
+                }
+            }
+            if(!isAdmin) {
+                result.put("message", "Tài khoản không có quyền.");
+            } else {
+                result.put("message", "Đăng nhập thành công.");
+                result.put("data", user.get());
+            }
+        }
+        return ResponseEntity.ok(result);
+    }
+
     @DeleteMapping("/admin/user/delete")
     public ResponseEntity<?> deleteUser(@RequestParam String id) {
         result = new HashMap<>();
