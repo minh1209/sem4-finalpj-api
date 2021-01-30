@@ -61,7 +61,7 @@ public class User {
     @OrderBy("create_at desc")
     private List<Transaction> transactions;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnoreProperties("user")
     private Token token;
 }
