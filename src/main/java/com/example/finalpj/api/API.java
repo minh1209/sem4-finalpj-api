@@ -378,7 +378,8 @@ public class API {
         result = new HashMap<>();
         Optional<Song> song = songService.findById(t.getSong().getId());
         Optional<User> user = userService.findById(t.getCustomer().getId());
-        if(!song.isPresent() || !user.isPresent()) {
+        Optional<Transaction> transactionCheck = transactionService.findBySongIdAndCustomerId(t.getSong().getId(), t.getCustomer().getId());
+        if(!song.isPresent() || !user.isPresent() || transactionCheck.isPresent()) {
             result.put("message", "Giao dịch thất bại.");
             result.put("status", false);
         } else {

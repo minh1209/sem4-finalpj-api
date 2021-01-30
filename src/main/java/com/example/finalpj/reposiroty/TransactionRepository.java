@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface TransactionRepository extends JpaRepository<Transaction, String> {
     List<Transaction> findAllBySongIdOrderByCreateAtDesc(String id, Pageable pageable);
@@ -18,4 +19,5 @@ public interface TransactionRepository extends JpaRepository<Transaction, String
 //    @Query(nativeQuery = true, value = "select t.*, s.name as song_name, s.price as song_price, s.main as song_main from transactions t inner join songs s on t.song_id = s.id inner join users u on t.customer_id = u.id where u.id = ?1")
 //    List<TransactionDAO> findAllByCustomerIdCustom(String id, Pageable pageable);
     List<Transaction> findAllByOrderByCreateAtDesc(Pageable pageable);
+    Optional<Transaction> findBySongIdAndCustomerId(String song_id, String customer_id);
 }

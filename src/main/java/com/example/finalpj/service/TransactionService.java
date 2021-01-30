@@ -49,4 +49,8 @@ public class TransactionService {
     public Transaction save(Transaction t) {
         return transactionRepository.save(t);
     }
+
+    public Optional<Transaction> findBySongIdAndCustomerId(String song_id, String customer_id) {
+        return transactionRepository.findBySongIdAndCustomerId(song_id, customer_id);
+    }
 }
