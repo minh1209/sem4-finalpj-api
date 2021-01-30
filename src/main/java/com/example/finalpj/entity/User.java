@@ -60,4 +60,8 @@ public class User {
     @JsonIgnoreProperties("customer")
     @OrderBy("create_at desc")
     private List<Transaction> transactions;
+
+    @OneToOne
+    @JsonIgnoreProperties("user")
+    private Token token;
 }
