@@ -1,5 +1,6 @@
 package com.example.finalpj.service;
 
+import com.example.finalpj.entity.Category;
 import com.example.finalpj.entity.Song;
 import com.example.finalpj.reposiroty.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,13 @@ public class SongService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
         return songRepository.findAll(pageable).getContent();
     }
+
+    public List<Song> findAllByCategory(int page, int size, Category category) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
+        return songRepository.findAllByCategory(category, pageable);
+    }
+
+
 
 //    public List<Song> findAllByOrderByCreateAtDesc() {
 //        return songRepository.findAllByOrderByCreateAtDesc();

@@ -49,13 +49,14 @@ public class API {
     private BCryptPasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
+
     private HashMap<String, Object> result;
 
 
     //  User------------------------------------------------------------------------------------------------------------
     @GetMapping("/user/all")
 //    public ResponseEntity<?> findAllUser(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size) {
-    public ResponseEntity<?> findAllUser(){
+    public ResponseEntity<?> findAllUser() {
         result = new HashMap<>();
         result.put("message", "ok");
 //        result.put("data", userService.findAll(page, size));
@@ -67,7 +68,7 @@ public class API {
     public ResponseEntity<?> getUserById(@RequestParam String id) {
         result = new HashMap<>();
         Optional<User> user = userService.findById(id);
-        if(!user.isPresent()) {
+        if (!user.isPresent()) {
             result.put("message", "Người dùng không tồn tại.");
         } else {
             result.put("message", "ok");
@@ -80,7 +81,7 @@ public class API {
     public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) {
         result = new HashMap<>();
         Optional<User> user = userService.findByEmail(email);
-        if(!user.isPresent()) {
+        if (!user.isPresent()) {
             result.put("message", "Người dùng không tồn tại.");
         } else if (!user.get().getActive()) {
             result.put("message", "Người dùng chưa xác minh qua email.");
@@ -97,7 +98,7 @@ public class API {
     public ResponseEntity<?> checkEmail(@RequestParam String email) {
         result = new HashMap<>();
         Optional<User> user = userService.findByEmail(email);
-        if(user.isPresent()) {
+        if (user.isPresent()) {
             result.put("message", "Email đã được sử dụng.");
             result.put("data", false);
         } else {
@@ -110,13 +111,13 @@ public class API {
     @PostMapping("/user/register")
     public ResponseEntity<?> register(@Valid @RequestBody User u, BindingResult bindingResult) {
         result = new HashMap<>();
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             result.put("message", "Thông tin chưa đúng.");
         } else {
             u.setPassword(encoder().encode(u.getPassword()));
             Optional<Role> role = roleService.findByName("role_user");
             List<Role> roles = new ArrayList<>();
-            if(!role.isPresent()) {
+            if (!role.isPresent()) {
                 Role new_role = new Role();
                 new_role.setName("role_user");
                 roles.add(roleService.save(new_role));
@@ -136,7 +137,7 @@ public class API {
     public ResponseEntity<?> sendVerification(@RequestParam String email) {
         result = new HashMap<>();
         Optional<User> user = userService.findByEmail(email);
-        if(!user.isPresent()) {
+        if (!user.isPresent()) {
             result.put("message", "Người dùng không tồn tại.");
         } else if (user.get().getActive()) {
             result.put("message", "Tài khoản đã được xác thực.");
@@ -151,7 +152,7 @@ public class API {
     public ResponseEntity<?> verifyUser(@RequestParam String code) {
         result = new HashMap<>();
         Optional<Token> findToken = tokenService.findByToken(code);
-        if(!findToken.isPresent()) {
+        if (!findToken.isPresent()) {
             result.put("message", "Mã xác thực không khả dụng.");
         } else if (findToken.get().getExpiredDateTime().isBefore(LocalDateTime.now())) {
             result.put("message", "Mã xác thực đã hết hạn sử dụng.");
@@ -174,7 +175,7 @@ public class API {
     public ResponseEntity<?> editUser(@RequestParam String id, @Valid @RequestBody User u, BindingResult bindingResult) {
         result = new HashMap<>();
         Optional<User> user = userService.findById(id);
-        if(!user.isPresent()) {
+        if (!user.isPresent()) {
             result.put("message", "Người dùng không tồn tại.");
         } else if (bindingResult.hasErrors()) {
             result.put("message", "Thông tin chưa đúng.");
@@ -193,7 +194,7 @@ public class API {
     public ResponseEntity<?> editUserPassword(@RequestParam String id, @RequestParam String password) {
         result = new HashMap<>();
         Optional<User> user = userService.findById(id);
-        if(!user.isPresent()) {
+        if (!user.isPresent()) {
             result.put("message", "Người dùng không tồn tại.");
         } else {
             user.get().setPassword(encoder().encode(password));
@@ -207,7 +208,7 @@ public class API {
     public ResponseEntity<?> updateAvatar(@RequestParam String id, @RequestParam String avatar) {
         result = new HashMap<>();
         Optional<User> user = userService.findById(id);
-        if(!user.isPresent()) {
+        if (!user.isPresent()) {
             result.put("message", "Người dùng không tồn tại.");
         } else {
             user.get().setAvatar(avatar);
@@ -226,22 +227,27 @@ public class API {
     }
 
 
-
     //  Song------------------------------------------------------------------------------------------------------------
     @GetMapping("/song/all")
     public ResponseEntity<?> findAllSong(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size) {
-//    public ResponseEntity<?> findAllSong() {
         result = new HashMap<>();
         result.put("message", "ok");
         result.put("data", songService.findAll(page, size));
-//        result.put("data", songService.findAllByOrderByCreateAtDesc());
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/song/category")
+    public ResponseEntity<?> findAllSongCategory(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size, @RequestParam Category category) {
+        result = new HashMap<>();
+        result.put("message", "ok");
+        result.put("data", songService.findAllByCategory(page, size, category));
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/song/get")
     public ResponseEntity<?> getSong(@RequestParam(required = false) String id) {
         result = new HashMap<>();
-        if(!id.isEmpty()) {
+        if (!id.isEmpty()) {
             Optional<Song> song = songService.findById(id);
             if (!song.isPresent()) {
                 result.put("message", "Beat không tồn tại.");
@@ -259,7 +265,7 @@ public class API {
         Optional<Song> song = songService.findById(id);
         if (!song.isPresent()) {
             result.put("message", "Không tìm thấy beat.");
-        } else if(bindingResult.hasErrors()) {
+        } else if (bindingResult.hasErrors()) {
             result.put("message", "Thông tin chưa đúng hoặc chưa đủ.");
         } else {
             s.setId(id);
@@ -273,7 +279,7 @@ public class API {
     @PostMapping("/song/add")
     public ResponseEntity<?> addSong(@Valid @RequestBody Song s, BindingResult bindingResult) {
         result = new HashMap<>();
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             result.put("message", "Thông tin chưa đúng hoặc chưa đủ.");
         } else {
             result.put("message", "Thêm beat thành công.");
@@ -286,7 +292,7 @@ public class API {
     public ResponseEntity<?> updateDemo(@RequestParam String demo, @RequestParam String id) {
         result = new HashMap<>();
         Optional<Song> song = songService.findById(id);
-        if(!song.isPresent()) {
+        if (!song.isPresent()) {
             result.put("message", "Beat không tồn tại.");
         } else {
             song.get().setDemo(demo);
@@ -300,7 +306,7 @@ public class API {
     public ResponseEntity<?> updateMain(@RequestParam String main, @RequestParam String id) {
         result = new HashMap<>();
         Optional<Song> song = songService.findById(id);
-        if(!song.isPresent()) {
+        if (!song.isPresent()) {
             result.put("message", "Beat không tồn tại.");
         } else {
             song.get().setMain(main);
@@ -319,7 +325,6 @@ public class API {
     }
 
 
-
     //  Category--------------------------------------------------------------------------------------------------------
     @GetMapping("/category/all")
     public ResponseEntity<?> getAll() {
@@ -332,7 +337,7 @@ public class API {
     @PostMapping("/category/add")
     public ResponseEntity<?> save(@RequestBody @Valid Category c, BindingResult bindingResult) {
         result = new HashMap<>();
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             result.put("message", "Thông tin chưa đúng hoặc chưa đủ.");
         } else {
             result.put("message", "Thêm thể loại thành công.");
@@ -342,27 +347,14 @@ public class API {
     }
 
     @GetMapping("/category/get")
-    public ResponseEntity<?> getCategory(@RequestParam(required = false) String id,
-                                     @RequestParam(required = false) String name) {
+    public ResponseEntity<?> getById(@RequestParam String id) {
         result = new HashMap<>();
-        if(id != null & name == null) {
-            Optional<Category> category = categoryService.findById(id);
-            if (!category.isPresent()) {
-                result.put("message", "Không tìm thấy thể loại.");
-            } else {
-                result.put("message", "ok");
-                result.put("data", category.get());
-            }
-        } else if (id == null && name != null) {
-            Optional<Category> category = categoryService.findByName(name);
-            if (!category.isPresent()) {
-                result.put("message", "Không tìm thấy thể loại.");
-            } else {
-                result.put("message", "ok");
-                result.put("data", category.get());
-            }
-        } else {
+        Optional<Category> category = categoryService.findById(id);
+        if (!category.isPresent()) {
             result.put("message", "Không tìm thấy thể loại.");
+        } else {
+            result.put("message", "ok");
+            result.put("data", category.get());
         }
         return ResponseEntity.ok(result);
     }
@@ -391,7 +383,7 @@ public class API {
         Optional<Song> song = songService.findById(t.getSong().getId());
         Optional<User> user = userService.findById(t.getCustomer().getId());
         Optional<Transaction> transactionCheck = transactionService.findBySongIdAndCustomerId(t.getSong().getId(), t.getCustomer().getId());
-        if(!song.isPresent() || !user.isPresent() || transactionCheck.isPresent()) {
+        if (!song.isPresent() || !user.isPresent() || transactionCheck.isPresent()) {
             result.put("message", "Giao dịch thất bại.");
             result.put("status", false);
         } else {
@@ -404,26 +396,25 @@ public class API {
     }
 
 
-
     //  Admin-----------------------------------------------------------------------------------------------------------
     @PostMapping("/admin/login")
     public ResponseEntity<?> adminLogin(@RequestParam String email, @RequestParam String password) {
         result = new HashMap<>();
         boolean isAdmin = false;
         Optional<User> user = userService.findByEmail(email);
-        if(!user.isPresent()) {
+        if (!user.isPresent()) {
             result.put("message", "Tài khoản không tồn tại.");
         } else if (!user.get().getActive()) {
             result.put("message", "Tài khoản chưa xác minh qua email.");
         } else if (!encoder().matches(password, user.get().getPassword())) {
             result.put("message", "Sai email hoặc mật khẩu.");
         } else {
-            for(Role role: user.get().getRoles()) {
-                if(role.getName().equals("role_admin")) {
+            for (Role role : user.get().getRoles()) {
+                if (role.getName().equals("role_admin")) {
                     isAdmin = true;
                 }
             }
-            if(!isAdmin) {
+            if (!isAdmin) {
                 result.put("message", "Tài khoản không có quyền.");
             } else {
                 result.put("message", "Đăng nhập thành công.");
@@ -458,7 +449,7 @@ public class API {
     public ResponseEntity<?> findAllTransactionWithTimeFilter(@RequestParam(required = false) String id, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date start, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date end, @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size) {
         result = new HashMap<>();
         result.put("message", "ok");
-        if(id == null) {
+        if (id == null) {
             result.put("data", transactionService.findAllByCreateAtBetweenOrderByCreateAtDesc(start, end, page, size));
         } else {
             result.put("data", transactionService.findAllBySong_Creator_IdAndCreateAtBetweenOrderByCreateAtDesc(start, end, id, page, size));
@@ -469,9 +460,9 @@ public class API {
     @PutMapping("/admin/transaction/author-payment")
     public ResponseEntity<?> updateAuthorPayment(@RequestParam String id) {
         Optional<Transaction> transaction = transactionService.findById(id);
-        if(!transaction.isPresent()) {
+        if (!transaction.isPresent()) {
             result.put("message", "Giao dịch không tồn tại.");
-        } else if(transaction.get().getAuthorPayment()) {
+        } else if (transaction.get().getAuthorPayment()) {
             result.put("message", "Giao dịch này đã được thanh toán cho nhạc sĩ.");
         } else {
             transaction.get().setAuthorPayment(true);
@@ -486,7 +477,7 @@ public class API {
 
     private void createVerification(String email) {
         Optional<User> user = userService.findByEmail(email);
-        if(user.isPresent()) {
+        if (user.isPresent()) {
             Optional<Token> findToken = tokenService.findByUserId(user.get().getId());
             Token token;
             if (!findToken.isPresent()) {
@@ -496,7 +487,7 @@ public class API {
                 user.get().setToken(token);
                 userService.save(user.get());
             } else {
-                if(findToken.get().getExpiredDateTime().isBefore(LocalDateTime.now())) {
+                if (findToken.get().getExpiredDateTime().isBefore(LocalDateTime.now())) {
                     token = new Token();
                     token.setId(findToken.get().getId());
                     token.setUser(user.get());
