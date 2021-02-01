@@ -351,7 +351,7 @@ public class API {
                 result.put("message", "Không tìm thấy thể loại.");
             } else {
                 result.put("message", "ok");
-                result.put("data", category.get().getName());
+                result.put("data", category.get());
             }
         } else if (id == null && name != null) {
             Optional<Category> category = categoryService.findByName(name);
@@ -359,7 +359,7 @@ public class API {
                 result.put("message", "Không tìm thấy thể loại.");
             } else {
                 result.put("message", "ok");
-                result.put("data", category.get().getName());
+                result.put("data", category.get());
             }
         } else {
             result.put("message", "Không tìm thấy thể loại.");
