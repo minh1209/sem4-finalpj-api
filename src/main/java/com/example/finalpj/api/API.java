@@ -342,14 +342,27 @@ public class API {
     }
 
     @GetMapping("/category/get")
-    public ResponseEntity<?> getById(@RequestParam String id) {
+    public ResponseEntity<?> getCategory(@RequestParam(required = false) String id,
+                                     @RequestParam(required = false) String name) {
         result = new HashMap<>();
-        Optional<Category> category = categoryService.findById(id);
-        if(!category.isPresent()) {
-            result.put("message", "Thể loại không tồn tại.");
+        if(id != null & name == null) {
+            Optional<Category> category = categoryService.findById(id);
+            if (!category.isPresent()) {
+                result.put("message", "Không tìm thấy thể loại.");
+            } else {
+                result.put("message", "ok");
+                result.put("data", category.get().getName());
+            }
+        } else if (id == null && name != null) {
+            Optional<Category> category = categoryService.findByName(name);
+            if (!category.isPresent()) {
+                result.put("message", "Không tìm thấy thể loại.");
+            } else {
+                result.put("message", "ok");
+                result.put("data", category.get().getName());
+            }
         } else {
-            result.put("message", "ok");
-            result.put("data", category.get().getName());
+            result.put("message", "Không tìm thấy thể loại.");
         }
         return ResponseEntity.ok(result);
     }
