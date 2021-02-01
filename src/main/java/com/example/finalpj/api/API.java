@@ -237,10 +237,10 @@ public class API {
     }
 
     @GetMapping("/song/category")
-    public ResponseEntity<?> findAllSongCategory(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size, @RequestParam Category category) {
+    public ResponseEntity<?> findAllSongCategoryName(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size, @RequestParam String category) {
         result = new HashMap<>();
         result.put("message", "ok");
-        result.put("data", songService.findAllByCategory(page, size, category));
+        result.put("data", songService.findAllByCategory_Name(page, size, category));
         return ResponseEntity.ok(result);
     }
 

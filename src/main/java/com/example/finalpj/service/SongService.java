@@ -28,9 +28,9 @@ public class SongService {
         return songRepository.findAll(pageable).getContent();
     }
 
-    public List<Song> findAllByCategory(int page, int size, Category category) {
+    public List<Song> findAllByCategory_Name(int page, int size, String category) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
-        return songRepository.findAllByCategory(category, pageable);
+        return songRepository.findAllByCategory_Name(category, pageable);
     }
 
 

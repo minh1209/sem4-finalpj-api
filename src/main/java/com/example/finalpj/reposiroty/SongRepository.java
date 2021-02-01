@@ -11,5 +11,5 @@ public interface SongRepository extends JpaRepository<Song, String> {
     List<Song> findAllByCreatorId(String id, Pageable pageable);
     List<Song> findAllByOrderByCreateAtDesc();
 //    void deleteById(String id);
-    List<Song> findAllByCategory(Category category, Pageable pageable);
+    List<Song> findAllByCategory_Name(String category, Pageable pageable);
 }

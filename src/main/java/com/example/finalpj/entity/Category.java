@@ -19,6 +19,7 @@ public class Category {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
 
+    @Column(unique = true)
     private String name;
     @UpdateTimestamp
     private Date updateAt;
