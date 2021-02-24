@@ -335,7 +335,7 @@ public class API {
     }
 
     @PostMapping("/category/add")
-    public ResponseEntity<?> save(@RequestBody @Valid Category c, BindingResult bindingResult) {
+    public ResponseEntity<?> addCategory(@RequestBody @Valid Category c, BindingResult bindingResult) {
         result = new HashMap<>();
         if (bindingResult.hasErrors()) {
             result.put("message", "Thông tin chưa đúng hoặc chưa đủ.");
@@ -347,7 +347,7 @@ public class API {
     }
 
     @GetMapping("/category/get")
-    public ResponseEntity<?> getById(@RequestParam String id) {
+    public ResponseEntity<?> getCategoryById(@RequestParam String id) {
         result = new HashMap<>();
         Optional<Category> category = categoryService.findById(id);
         if (!category.isPresent()) {
@@ -374,6 +374,14 @@ public class API {
         result = new HashMap<>();
         result.put("message", "ok");
         result.put("data", transactionService.findAllBySongIdOrderByCreateAtDesc(id, page, size));
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/transaction/get")
+    public ResponseEntity<?> getTransactionById(@RequestParam String id) {
+        result = new HashMap<>();
+        result.put("message", "ok");
+        result.put("data", transactionService.findById(id));
         return ResponseEntity.ok(result);
     }
 
