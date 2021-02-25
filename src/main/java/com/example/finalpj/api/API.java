@@ -454,13 +454,13 @@ public class API {
     }
 
     @GetMapping("/admin/transaction/timefilter")
-    public ResponseEntity<?> findAllTransactionWithTimeFilter(@RequestParam(required = false) String id, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date start, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date end, @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size) {
+    public ResponseEntity<?> findAllTransactionWithTimeFilter(@RequestParam(required = false) String id, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date start, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date end) {
         result = new HashMap<>();
         result.put("message", "ok");
         if (id == null) {
-            result.put("data", transactionService.findAllByCreateAtBetweenOrderByCreateAtDesc(start, end, page, size));
+            result.put("data", transactionService.findAllByCreateAtBetweenOrderByCreateAtDesc(start, end));
         } else {
-            result.put("data", transactionService.findAllBySong_Creator_IdAndCreateAtBetweenOrderByCreateAtDesc(start, end, id, page, size));
+            result.put("data", transactionService.findAllBySong_Creator_IdAndCreateAtBetweenOrderByCreateAtDesc(start, end, id));
         }
         return ResponseEntity.ok(result);
     }

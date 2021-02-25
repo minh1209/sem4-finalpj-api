@@ -32,14 +32,12 @@ public class TransactionService {
         return transactionRepository.findAllByOrderByCreateAtDesc(pageable);
     }
 
-    public List<Transaction> findAllByCreateAtBetweenOrderByCreateAtDesc(Date start, Date end, Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return transactionRepository.findAllByCreateAtBetweenOrderByCreateAtDesc(start, end, pageable);
+    public List<Transaction> findAllByCreateAtBetweenOrderByCreateAtDesc(Date start, Date end) {
+        return transactionRepository.findAllByCreateAtBetweenOrderByCreateAtDesc(start, end);
     }
 
-    public List<Transaction> findAllBySong_Creator_IdAndCreateAtBetweenOrderByCreateAtDesc(Date start, Date end, String id, Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return transactionRepository.findAllBySong_Creator_IdAndCreateAtBetweenOrderByCreateAtDesc(id, start, end, pageable);
+    public List<Transaction> findAllBySong_Creator_IdAndCreateAtBetweenOrderByCreateAtDesc(Date start, Date end, String id) {
+        return transactionRepository.findAllBySong_Creator_IdAndCreateAtBetweenOrderByCreateAtDesc(id, start, end);
     }
 
     public Optional<Transaction> findById(String id) {

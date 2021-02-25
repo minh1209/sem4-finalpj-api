@@ -23,12 +23,10 @@ public class Song {
 
     @NotBlank
     private String name;
-//    private String description;
+    private String description;
 
-//    @NotBlank
     private BigDecimal price;
 
-//    private boolean status = true;
 
     private String main;
     private String demo;
