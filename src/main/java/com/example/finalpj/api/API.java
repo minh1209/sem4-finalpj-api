@@ -77,6 +77,19 @@ public class API {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/user/get-username")
+    public ResponseEntity<?> getUserByUsername(@RequestParam String username) {
+        result = new HashMap<>();
+        Optional<User> user = userService.findByUsername(username);
+        if (!user.isPresent()) {
+            result.put("message", "Người dùng không tồn tại.");
+        } else {
+            result.put("message", "ok");
+            result.put("data", user.get());
+        }
+        return ResponseEntity.ok(result);
+    }
+
     @PostMapping("/user/login")
     public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) {
         result = new HashMap<>();
@@ -94,7 +107,7 @@ public class API {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/user/check")
+    @GetMapping("/user/check-email")
     public ResponseEntity<?> checkEmail(@RequestParam String email) {
         result = new HashMap<>();
         Optional<User> user = userService.findByEmail(email);
@@ -103,6 +116,20 @@ public class API {
             result.put("data", false);
         } else {
             result.put("message", "Email khả dụng.");
+            result.put("data", true);
+        }
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/user/check-username")
+    public ResponseEntity<?> checkUsername(@RequestParam String username) {
+        result = new HashMap<>();
+        Optional<User> user = userService.findByUsername(username);
+        if (user.isPresent()) {
+            result.put("message", "Username đã được sử dụng.");
+            result.put("data", false);
+        } else {
+            result.put("message", "Username khả dụng.");
             result.put("data", true);
         }
         return ResponseEntity.ok(result);

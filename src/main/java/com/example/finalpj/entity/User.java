@@ -32,7 +32,7 @@ public class User {
     private String password;
 
     @Size(min = 1, max = 32)
-    private String name;
+    private String username;
 
     @DateTimeFormat
     private Date dob;

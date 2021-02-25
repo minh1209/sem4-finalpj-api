@@ -11,6 +11,7 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findByEmail(String email);
+    Optional<User> findByUsername(String username);
 
 //    @Query(value = "select distinct u from User u join u.songs s where s.status = false order by size(s) desc")
 //    List<User> findTop20UserGetPaid(Pageable pageable);
