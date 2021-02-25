@@ -24,7 +24,7 @@ public class Song {
     @NotBlank
     private String name;
     private String description;
-
+    private Integer bpm;
     private BigDecimal price;
 
 
