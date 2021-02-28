@@ -54,16 +54,6 @@ public class API {
 
 
     //  User------------------------------------------------------------------------------------------------------------
-    @GetMapping("/user/all")
-//    public ResponseEntity<?> findAllUser(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size) {
-    public ResponseEntity<?> findAllUser() {
-        result = new HashMap<>();
-        result.put("message", "ok");
-//        result.put("data", userService.findAll(page, size));
-        result.put("data", userService.findAll());
-        return ResponseEntity.ok(result);
-    }
-
     @GetMapping("/user/get")
     public ResponseEntity<?> getUserById(@RequestParam String id) {
         result = new HashMap<>();
@@ -456,6 +446,16 @@ public class API {
                 result.put("data", user.get());
             }
         }
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/admin/user/all")
+//    public ResponseEntity<?> findAllUser(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size) {
+    public ResponseEntity<?> findAllUser() {
+        result = new HashMap<>();
+        result.put("message", "ok");
+//        result.put("data", userService.findAll(page, size));
+        result.put("data", userService.findAll());
         return ResponseEntity.ok(result);
     }
 
