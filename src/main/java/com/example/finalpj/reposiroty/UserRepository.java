@@ -21,6 +21,9 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     @Query(value = "select u from User u where u.roles.size < 2")
     List<User> findAllUserNotAdmin();
+
+    @Query(value = "select u from User u where lower(trim(u.username)) like %?1%")
+    List<User> findAllByUsernameLike(String username);
 //    @Query(value = "select u from User u join u.songs s order by ")
 //    List<User> findAllCustom(Pageable pageable);
 //    List<User> findTop20ByOrderByCreateAtDesc();

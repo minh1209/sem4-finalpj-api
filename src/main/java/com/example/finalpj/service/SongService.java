@@ -2,6 +2,7 @@ package com.example.finalpj.service;
 
 import com.example.finalpj.entity.Category;
 import com.example.finalpj.entity.Song;
+import com.example.finalpj.entity.User;
 import com.example.finalpj.reposiroty.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -46,5 +47,9 @@ public class SongService {
     public List<Song> findTop6ByOrderByCreate_atDesc() {
         Pageable pageable = PageRequest.of(0, 6, Sort.by("createAt").descending());
         return songRepository.findAll(pageable).getContent();
+    }
+
+    public List<Song> findAllByNameLike(String name) {
+        return songRepository.findAllByNameLike(name);
     }
 }

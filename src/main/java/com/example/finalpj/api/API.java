@@ -253,6 +253,13 @@ public class API {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/user/search")
+    public ResponseEntity<?> userSearch(@RequestParam String username) {
+        result = new HashMap<>();
+        result.put("message", "ok");
+        result.put("data", userService.findAllByUsernameLike(username));
+        return ResponseEntity.ok(result);
+    }
 
     //  Song------------------------------------------------------------------------------------------------------------
     @GetMapping("/song/all")
@@ -351,6 +358,13 @@ public class API {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/song/search")
+    public ResponseEntity<?> songSearch(@RequestParam String name) {
+        result = new HashMap<>();
+        result.put("message", "ok");
+        result.put("data", songService.findAllByNameLike(name));
+        return ResponseEntity.ok(result);
+    }
 
     //  Category--------------------------------------------------------------------------------------------------------
     @GetMapping("/category/all")

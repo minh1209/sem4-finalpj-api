@@ -54,6 +54,10 @@ public class UserService {
         return userRepository.findTop20UserGetPaid(pageable);
     }
 
+    public List<User> findAllByUsernameLike(String username) {
+        return userRepository.findAllByUsernameLike(username);
+    }
+
     public void deleteById(String id) {
         userRepository.deleteById(id);
     }
