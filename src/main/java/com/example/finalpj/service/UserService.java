@@ -30,6 +30,9 @@ public class UserService {
     public List<User> findAll() {
         return userRepository.findAll();
     }
+    public List<User> findAllUserNotAdmin() {
+        return userRepository.findAllUserNotAdmin();
+    }
 
     public Optional<User> findById(String id) {
         return userRepository.findById(id);

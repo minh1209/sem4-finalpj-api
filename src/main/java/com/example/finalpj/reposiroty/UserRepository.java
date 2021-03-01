@@ -19,6 +19,8 @@ public interface UserRepository extends JpaRepository<User, String> {
     @Query(value = "select u from User u join u.songs s group by u.id order by count(s.transactions) desc")
     List<User> findTop20UserGetPaid(Pageable pageable);
 
+    @Query(value = "select u from User u where u.roles.size < 2")
+    List<User> findAllUserNotAdmin();
 //    @Query(value = "select u from User u join u.songs s order by ")
 //    List<User> findAllCustom(Pageable pageable);
 //    List<User> findTop20ByOrderByCreateAtDesc();

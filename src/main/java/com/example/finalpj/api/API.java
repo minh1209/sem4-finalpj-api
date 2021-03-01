@@ -83,6 +83,7 @@ public class API {
     @PostMapping("/user/login")
     public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) {
         result = new HashMap<>();
+        boolean isAdmin = false;
         Optional<User> user = userService.findByEmail(email);
         if (!user.isPresent()) {
             result.put("message", "Người dùng không tồn tại.");
@@ -91,8 +92,17 @@ public class API {
         } else if (!encoder().matches(password, user.get().getPassword())) {
             result.put("message", "Sai email hoặc mật khẩu.");
         } else {
-            result.put("message", "Đăng nhập thành công.");
-            result.put("data", user.get());
+            for (Role role : user.get().getRoles()) {
+                if (role.getName().equals("role_admin")) {
+                    isAdmin = true;
+                }
+            }
+            if (isAdmin) {
+                result.put("message", "Tài khoản quản trị viên.");
+            } else {
+                result.put("message", "Đăng nhập thành công.");
+                result.put("data", user.get());
+            }
         }
         return ResponseEntity.ok(result);
     }
@@ -455,7 +465,8 @@ public class API {
         result = new HashMap<>();
         result.put("message", "ok");
 //        result.put("data", userService.findAll(page, size));
-        result.put("data", userService.findAll());
+//        result.put("data", userService.findAll());
+        result.put("data", userService.findAllUserNotAdmin());
         return ResponseEntity.ok(result);
     }
 
