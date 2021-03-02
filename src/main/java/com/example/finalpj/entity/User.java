@@ -53,12 +53,12 @@ public class User {
 
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("creator")
-    @OrderBy("create_at desc")
+    @OrderBy("createAt desc")
     private List<Song> songs;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("customer")
-    @OrderBy("create_at desc")
+    @OrderBy("createAt desc")
     private List<Transaction> transactions;
 
     @OneToOne(cascade = CascadeType.ALL)

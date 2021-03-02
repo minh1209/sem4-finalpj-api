@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +35,9 @@ public class SongService {
         return songRepository.findAllByCategory_Name(category, pageable);
     }
 
-
+    public List<Song> findAllByCategoryIdAndCreateAtBetween(String id, Date start, Date end) {
+        return songRepository.findAllByCategoryIdAndCreateAtBetween(id, start, end);
+    }
 
 //    public List<Song> findAllByOrderByCreateAtDesc() {
 //        return songRepository.findAllByOrderByCreateAtDesc();

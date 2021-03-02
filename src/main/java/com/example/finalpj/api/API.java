@@ -59,7 +59,7 @@ public class API {
         result = new HashMap<>();
         Optional<User> user = userService.findById(id);
         if (!user.isPresent()) {
-            result.put("message", "Người dùng không tồn tại.");
+            result.put("message", "User is not existed.");
         } else {
             result.put("message", "ok");
             result.put("data", user.get());
@@ -72,7 +72,7 @@ public class API {
         result = new HashMap<>();
         Optional<User> user = userService.findByUsername(username);
         if (!user.isPresent()) {
-            result.put("message", "Người dùng không tồn tại.");
+            result.put("message", "User is not existed.");
         } else {
             result.put("message", "ok");
             result.put("data", user.get());
@@ -86,11 +86,11 @@ public class API {
         boolean isAdmin = false;
         Optional<User> user = userService.findByEmail(email);
         if (!user.isPresent()) {
-            result.put("message", "Người dùng không tồn tại.");
+            result.put("message", "User is not existed.");
         } else if (!user.get().getActive()) {
-            result.put("message", "Người dùng chưa xác minh qua email.");
+            result.put("message", "Email have not activated.");
         } else if (!encoder().matches(password, user.get().getPassword())) {
-            result.put("message", "Sai email hoặc mật khẩu.");
+            result.put("message", "Wrong email or password.");
         } else {
             for (Role role : user.get().getRoles()) {
                 if (role.getName().equals("role_admin")) {
@@ -98,9 +98,9 @@ public class API {
                 }
             }
             if (isAdmin) {
-                result.put("message", "Tài khoản quản trị viên.");
+                result.put("message", "Admin account is not allowed.");
             } else {
-                result.put("message", "Đăng nhập thành công.");
+                result.put("message", "Log in successfully.");
                 result.put("data", user.get());
             }
         }
@@ -112,10 +112,10 @@ public class API {
         result = new HashMap<>();
         Optional<User> user = userService.findByEmail(email);
         if (user.isPresent()) {
-            result.put("message", "Email đã được sử dụng.");
+            result.put("message", "Email is existed.");
             result.put("data", false);
         } else {
-            result.put("message", "Email khả dụng.");
+            result.put("message", "Email is available.");
             result.put("data", true);
         }
         return ResponseEntity.ok(result);
@@ -126,10 +126,10 @@ public class API {
         result = new HashMap<>();
         Optional<User> user = userService.findByUsername(username);
         if (user.isPresent()) {
-            result.put("message", "Username đã được sử dụng.");
+            result.put("message", "Username has been used.");
             result.put("data", false);
         } else {
-            result.put("message", "Username khả dụng.");
+            result.put("message", "Username is available.");
             result.put("data", true);
         }
         return ResponseEntity.ok(result);
@@ -139,7 +139,7 @@ public class API {
     public ResponseEntity<?> register(@Valid @RequestBody User u, BindingResult bindingResult) {
         result = new HashMap<>();
         if (bindingResult.hasErrors()) {
-            result.put("message", "Thông tin chưa đúng.");
+            result.put("message", "Wrong information.");
         } else {
             u.setPassword(encoder().encode(u.getPassword()));
             Optional<Role> role = roleService.findByName("role_user");
@@ -154,7 +154,7 @@ public class API {
             u.setRoles(roles);
 
             result.put("data", userService.save(u));
-            result.put("message", "Đăng ký thành công.");
+            result.put("message", "Registration successfully.");
             createVerification(u.getEmail());
         }
         return ResponseEntity.ok(result);
@@ -165,12 +165,12 @@ public class API {
         result = new HashMap<>();
         Optional<User> user = userService.findByEmail(email);
         if (!user.isPresent()) {
-            result.put("message", "Người dùng không tồn tại.");
+            result.put("message", "User is not existed.");
         } else if (user.get().getActive()) {
-            result.put("message", "Tài khoản đã được xác thực.");
+            result.put("message", "Account has already been activated.");
         } else {
             createVerification(email);
-            result.put("message", "Gửi email xác nhận thành công.");
+            result.put("message", "Send email successfully.");
         }
         return ResponseEntity.ok(result);
     }
@@ -180,19 +180,19 @@ public class API {
         result = new HashMap<>();
         Optional<Token> findToken = tokenService.findByToken(code);
         if (!findToken.isPresent()) {
-            result.put("message", "Mã xác thực không khả dụng.");
+            result.put("message", "Code is not available.");
         } else if (findToken.get().getExpiredDateTime().isBefore(LocalDateTime.now())) {
-            result.put("message", "Mã xác thực đã hết hạn sử dụng.");
+            result.put("message", "Expired code.");
         } else {
             Optional<User> user = userService.findById(findToken.get().getUser().getId());
             if (!user.isPresent()) {
-                result.put("message", "Người dùng không tồn tại.");
+                result.put("message", "User is not existed.");
             } else if (user.get().getActive()) {
-                result.put("message", "Tài khoản đã được xác thực.");
+                result.put("message", "Account has already been activated.");
             } else {
                 user.get().setActive(true);
                 result.put("data", userService.save(user.get()));
-                result.put("message", "Xác thực thành công.");
+                result.put("message", "Account activation successfully.");
             }
         }
         return ResponseEntity.ok(result);
@@ -203,15 +203,15 @@ public class API {
         result = new HashMap<>();
         Optional<User> user = userService.findById(id);
         if (!user.isPresent()) {
-            result.put("message", "Người dùng không tồn tại.");
+            result.put("message", "User is not existed");
         } else if (bindingResult.hasErrors()) {
-            result.put("message", "Thông tin chưa đúng.");
+            result.put("message", "Wrong information.");
         } else {
             u.setId(id);
             u.setCreateAt(user.get().getCreateAt());
             u.setActive(user.get().getActive());
             u.setPassword(user.get().getPassword());
-            result.put("message", "Cập nhật thông tin thành công.");
+            result.put("message", "Edit successfullly.");
             result.put("data", userService.save(u));
         }
         return ResponseEntity.ok(result);
@@ -222,10 +222,10 @@ public class API {
         result = new HashMap<>();
         Optional<User> user = userService.findById(id);
         if (!user.isPresent()) {
-            result.put("message", "Người dùng không tồn tại.");
+            result.put("message", "User is not existed.");
         } else {
             user.get().setPassword(encoder().encode(password));
-            result.put("message", "Cập nhật mật khẩu thành công.");
+            result.put("message", "Update password successfully.");
             result.put("data", userService.save(user.get()));
         }
         return ResponseEntity.ok(result);
@@ -236,10 +236,10 @@ public class API {
         result = new HashMap<>();
         Optional<User> user = userService.findById(id);
         if (!user.isPresent()) {
-            result.put("message", "Người dùng không tồn tại.");
+            result.put("message", "User is not existed.");
         } else {
             user.get().setAvatar(avatar);
-            result.put("message", "Cập nhật ảnh đại diện thành công.");
+            result.put("message", "Update avatar successfully.");
             result.put("data", userService.save(user.get()));
         }
         return ResponseEntity.ok(result);
@@ -284,7 +284,7 @@ public class API {
         if (!id.isEmpty()) {
             Optional<Song> song = songService.findById(id);
             if (!song.isPresent()) {
-                result.put("message", "Beat không tồn tại.");
+                result.put("message", "Beat is not existed.");
             } else {
                 result.put("message", "ok");
                 result.put("data", song.get());
@@ -298,13 +298,13 @@ public class API {
         result = new HashMap<>();
         Optional<Song> song = songService.findById(id);
         if (!song.isPresent()) {
-            result.put("message", "Không tìm thấy beat.");
+            result.put("message", "Beat is not existed.");
         } else if (bindingResult.hasErrors()) {
-            result.put("message", "Thông tin chưa đúng hoặc chưa đủ.");
+            result.put("message", "Wrong information.");
         } else {
             s.setId(id);
             s.setCreateAt(song.get().getCreateAt());
-            result.put("message", "Cập nhật thông tin thành công.");
+            result.put("message", "Edit beat successfully.");
             result.put("data", songService.save(s));
         }
         return ResponseEntity.ok(result);
@@ -314,9 +314,9 @@ public class API {
     public ResponseEntity<?> addSong(@Valid @RequestBody Song s, BindingResult bindingResult) {
         result = new HashMap<>();
         if (bindingResult.hasErrors()) {
-            result.put("message", "Thông tin chưa đúng hoặc chưa đủ.");
+            result.put("message", "Wrong information.");
         } else {
-            result.put("message", "Thêm beat thành công.");
+            result.put("message", "Add beat successfully.");
             result.put("data", songService.save(s));
         }
         return ResponseEntity.ok(result);
@@ -327,10 +327,10 @@ public class API {
         result = new HashMap<>();
         Optional<Song> song = songService.findById(id);
         if (!song.isPresent()) {
-            result.put("message", "Beat không tồn tại.");
+            result.put("message", "Beat is not existed.");
         } else {
             song.get().setDemo(demo);
-            result.put("message", "Cập nhật demo beat thành công.");
+            result.put("message", "Update demo beat successfully.");
             result.put("data", songService.save(song.get()));
         }
         return ResponseEntity.ok(result);
@@ -341,10 +341,10 @@ public class API {
         result = new HashMap<>();
         Optional<Song> song = songService.findById(id);
         if (!song.isPresent()) {
-            result.put("message", "Beat không tồn tại.");
+            result.put("message", "Beat is not existed.");
         } else {
             song.get().setMain(main);
-            result.put("message", "Cập nhật main beat thành công.");
+            result.put("message", "Update main beat successfully.");
             result.put("data", songService.save(song.get()));
         }
         return ResponseEntity.ok(result);
@@ -379,9 +379,9 @@ public class API {
     public ResponseEntity<?> addCategory(@RequestBody @Valid Category c, BindingResult bindingResult) {
         result = new HashMap<>();
         if (bindingResult.hasErrors()) {
-            result.put("message", "Thông tin chưa đúng hoặc chưa đủ.");
+            result.put("message", "Wrong information.");
         } else {
-            result.put("message", "Thêm thể loại thành công.");
+            result.put("message", "Add category successfully.");
             result.put("data", categoryService.save(c));
         }
         return ResponseEntity.ok(result);
@@ -392,7 +392,7 @@ public class API {
         result = new HashMap<>();
         Optional<Category> category = categoryService.findById(id);
         if (!category.isPresent()) {
-            result.put("message", "Không tìm thấy thể loại.");
+            result.put("message", "Category is not existed.");
         } else {
             result.put("message", "ok");
             result.put("data", category.get());
@@ -433,11 +433,11 @@ public class API {
         Optional<User> user = userService.findById(t.getCustomer().getId());
         Optional<Transaction> transactionCheck = transactionService.findBySongIdAndCustomerId(t.getSong().getId(), t.getCustomer().getId());
         if (!song.isPresent() || !user.isPresent() || transactionCheck.isPresent()) {
-            result.put("message", "Giao dịch thất bại.");
+            result.put("message", "Transaction failed.");
             result.put("status", false);
         } else {
             transactionService.save(t);
-            result.put("message", "Xử lý giao dịch thành công.");
+            result.put("message", "Transaction successfully.");
             result.put("status", true);
         }
 
@@ -452,11 +452,11 @@ public class API {
         boolean isAdmin = false;
         Optional<User> user = userService.findByEmail(email);
         if (!user.isPresent()) {
-            result.put("message", "Tài khoản không tồn tại.");
+            result.put("message", "User is not existed.");
         } else if (!user.get().getActive()) {
-            result.put("message", "Tài khoản chưa xác minh qua email.");
+            result.put("message", "User is not activated.");
         } else if (!encoder().matches(password, user.get().getPassword())) {
-            result.put("message", "Sai email hoặc mật khẩu.");
+            result.put("message", "Wrong email or password.");
         } else {
             for (Role role : user.get().getRoles()) {
                 if (role.getName().equals("role_admin")) {
@@ -464,9 +464,9 @@ public class API {
                 }
             }
             if (!isAdmin) {
-                result.put("message", "Tài khoản không có quyền.");
+                result.put("message", "User do not have permissions.");
             } else {
-                result.put("message", "Đăng nhập thành công.");
+                result.put("message", "Log in successfully.");
                 result.put("data", user.get());
             }
         }
@@ -489,10 +489,10 @@ public class API {
         result = new HashMap<>();
         Optional<User> user = userService.findById(id);
         if (!user.isPresent()) {
-            result.put("message", "Người dùng không tồn tại.");
+            result.put("message", "User is not existed.");
         } else {
             userService.deleteById(id);
-            result.put("message", "Xoá người dùng thành công.");
+            result.put("message", "Delete user successfully.");
         }
         return ResponseEntity.ok(result);
     }
@@ -502,6 +502,14 @@ public class API {
         result = new HashMap<>();
         result.put("message", "ok");
         result.put("data", transactionService.findAll(page, size));
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/admin/song/revenue-category")
+    public ResponseEntity<?> findAllSongByCategoryAndTime(@RequestParam String id, @RequestParam java.sql.Date start, @RequestParam java.sql.Date end) {
+        result = new HashMap<>();
+        result.put("message", "ok");
+        result.put("data", songService.findAllByCategoryIdAndCreateAtBetween(id, start, end));
         return ResponseEntity.ok(result);
     }
 
@@ -521,13 +529,13 @@ public class API {
     public ResponseEntity<?> updateAuthorPayment(@RequestParam String id) {
         Optional<Transaction> transaction = transactionService.findById(id);
         if (!transaction.isPresent()) {
-            result.put("message", "Giao dịch không tồn tại.");
+            result.put("message", "Transaction is not existed.");
         } else if (transaction.get().getAuthorPayment()) {
-            result.put("message", "Giao dịch này đã được thanh toán cho nhạc sĩ.");
+            result.put("message", "Transaction has already been paid to musician.");
         } else {
             transaction.get().setAuthorPayment(true);
             transactionService.save(transaction.get());
-            result.put("message", "Thanh toán cho nhạc sĩ thành công.");
+            result.put("message", "Transaction is paid successfully.");
         }
         return ResponseEntity.ok(result);
     }

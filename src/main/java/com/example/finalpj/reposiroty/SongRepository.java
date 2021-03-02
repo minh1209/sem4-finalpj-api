@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.sql.Date;
 import java.util.List;
 
 public interface SongRepository extends JpaRepository<Song, String> {
@@ -18,4 +19,7 @@ public interface SongRepository extends JpaRepository<Song, String> {
 
     @Query(value = "select s from Song s where lower(trim(s.name)) like %?1% order by s.createAt desc")
     List<Song> findAllByNameLike(String name);
+
+//    @Query(value = "select s from Song s where s.category.id = ?1 and s.createAt between ?2 and ?3")
+    List<Song> findAllByCategoryIdAndCreateAtBetween(String id, Date start, Date end);
 }

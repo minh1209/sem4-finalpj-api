@@ -46,6 +46,6 @@ public class Song {
 
     @OneToMany(mappedBy = "song")
     @JsonIgnoreProperties("song")
-    @OrderBy("create_at desc")
+    @OrderBy("authorPayment asc , createAt desc")
     private List<Transaction> transactions;
 }

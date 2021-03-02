@@ -28,5 +28,6 @@ public class Category {
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("category")
+    @OrderBy("createAt desc")
     private List<Song> songs;
 }
