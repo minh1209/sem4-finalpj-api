@@ -21,5 +21,5 @@ public interface SongRepository extends JpaRepository<Song, String> {
     List<Song> findAllByNameLike(String name);
 
 //    @Query(value = "select s from Song s where s.category.id = ?1 and s.createAt between ?2 and ?3")
-    List<Song> findAllByCategoryIdAndCreateAtBetween(String id, Date start, Date end);
+    List<Song> findAllByCategoryIdAndTransactions_CreateAtBetween(String id, Date start, Date end);
 }

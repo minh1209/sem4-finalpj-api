@@ -509,7 +509,7 @@ public class API {
     public ResponseEntity<?> findAllSongByCategoryAndTime(@RequestParam String id, @RequestParam java.sql.Date start, @RequestParam java.sql.Date end) {
         result = new HashMap<>();
         result.put("message", "ok");
-        result.put("data", songService.findAllByCategoryIdAndCreateAtBetween(id, start, end));
+        result.put("data", songService.findAllByCategoryIdAndTransactions_CreateAtBetween(id, start, end));
         return ResponseEntity.ok(result);
     }
 
