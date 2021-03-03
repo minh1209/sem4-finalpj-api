@@ -1,5 +1,6 @@
 package com.example.finalpj.reposiroty;
 
+import com.example.finalpj.dto.TransactionChildrenDto;
 import com.example.finalpj.dto.TransactionDto;
 import com.example.finalpj.entity.Transaction;
 import org.springframework.data.domain.Pageable;
@@ -39,4 +40,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, String
     @Query(value = "select t from Transaction t where t.customer.id = ?1 and (t.createAt between ?2 and ?3) order by t.createAt desc")
     List<TransactionDto> findAllDtoByCustomerAndTime(String customer_id, Date start, Date end);
 
+    @Query(value = "select t from Transaction t where t.customer.id = ?1 and t.song.id = ?2")
+    Optional<TransactionChildrenDto> checkUserPurchasedSong(String customer_id, String song_id);
 }

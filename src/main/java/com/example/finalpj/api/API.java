@@ -1,5 +1,6 @@
 package com.example.finalpj.api;
 
+import com.example.finalpj.dto.TransactionChildrenDto;
 import com.example.finalpj.entity.*;
 import com.example.finalpj.service.*;
 import freemarker.template.Template;
@@ -415,6 +416,18 @@ public class API {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/transaction/check")
+    public ResponseEntity<?> check(@RequestParam String customer_id, @RequestParam String song_id) {
+        result = new HashMap<>();
+        result.put("message", "ok");
+        Optional<TransactionChildrenDto> t = transactionService.checkUserPurchasedSong(customer_id, song_id);
+        if (!t.isPresent()) {
+            result.put("data", false);
+        } else {
+            result.put("data", true);
+        }
+        return ResponseEntity.ok(result);
+    }
 
     //  Admin-----------------------------------------------------------------------------------------------------------
     @PostMapping("/admin/login")

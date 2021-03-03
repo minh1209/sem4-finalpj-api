@@ -13,5 +13,4 @@ public interface UserDto {
     String getPhone();
     String getIdentification();
     String getAvatar();
-    List<TransactionChildrenDto> getTransactions();
 }

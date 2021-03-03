@@ -1,5 +1,6 @@
 package com.example.finalpj.service;
 
+import com.example.finalpj.dto.TransactionChildrenDto;
 import com.example.finalpj.dto.TransactionDto;
 import com.example.finalpj.entity.Transaction;
 import com.example.finalpj.reposiroty.TransactionRepository;
@@ -69,5 +70,9 @@ public class TransactionService {
 
     public List<TransactionDto> findAllDtoByCustomerAndTime(String customer_id, Date start, Date end) {
         return transactionRepository.findAllDtoByCustomerAndTime(customer_id, start, end);
+    }
+
+    public Optional<TransactionChildrenDto> checkUserPurchasedSong(String customer_id, String song_id) {
+        return transactionRepository.checkUserPurchasedSong(customer_id, song_id);
     }
 }
