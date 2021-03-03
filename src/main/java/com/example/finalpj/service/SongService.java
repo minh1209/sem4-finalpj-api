@@ -1,5 +1,6 @@
 package com.example.finalpj.service;
 
+import com.example.finalpj.dto.SongDto;
 import com.example.finalpj.entity.Category;
 import com.example.finalpj.entity.Song;
 import com.example.finalpj.entity.User;
@@ -21,38 +22,54 @@ public class SongService {
     @Autowired
     private SongRepository songRepository;
 
+    //    Non-DTO
     public Song save(Song s) {
         return songRepository.save(s);
     }
-
-    public List<Song> findAll(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
-        return songRepository.findAll(pageable).getContent();
-    }
-
-    public List<Song> findAllByCategory_Name(int page, int size, String category) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createAt").descending());
-        return songRepository.findAllByCategory_Name(category, pageable);
-    }
-
-    public List<Song> findAllByCategoryIdAndTransactions_CreateAtBetween(String id, Date start, Date end) {
-        return songRepository.findAllByCategoryIdAndTransactions_CreateAtBetween(id, start, end);
-    }
-
-//    public List<Song> findAllByOrderByCreateAtDesc() {
-//        return songRepository.findAllByOrderByCreateAtDesc();
-//    }
 
     public Optional<Song> findById(String id) {
         return songRepository.findById(id);
     }
 
-    public List<Song> findTop6ByOrderByCreate_atDesc() {
-        Pageable pageable = PageRequest.of(0, 6, Sort.by("createAt").descending());
-        return songRepository.findAll(pageable).getContent();
+    //    DTO
+    public List<SongDto> findAllDto() {
+        return songRepository.findAllDto();
     }
 
-    public List<Song> findAllByNameLike(String name) {
-        return songRepository.findAllByNameLike(name);
+    public List<SongDto> findAllDtoByCreator(String creator_id) {
+        return songRepository.findAllDtoByCreator(creator_id);
+    }
+
+    public SongDto findDtoById(String id) {
+        return songRepository.findDtoById(id);
+    }
+
+    public List<SongDto> findAllDtoByCategory(String category_id) {
+        return songRepository.findAllDtoByCategory(category_id);
+    }
+
+    public List<SongDto> findAllDtoByCreatorAndCategory(String creator_id, String category_id) {
+        return songRepository.findAllDtoByCreatorAndCategory(creator_id, category_id);
+    }
+
+    public List<SongDto> findAllDtoByCreatorAndCategoryAndTime(String creator_id, String category_id, Date start, Date end) {
+        return songRepository.findAllDtoByCreatorAndCategoryAndTime(creator_id, category_id, start, end);
+    }
+
+    public List<SongDto> findAllDtoBySearchName(String name) {
+        return songRepository.findAllDtoBySearchName(name);
+    }
+
+    public List<SongDto> findallDtoByCategoryAndTime(String category_id, Date start, Date end) {
+        return songRepository.findallDtoByCategoryAndTime(category_id, start, end);
+    }
+
+    public List<SongDto> findallDtoByCreatorAndTime(String creator_id, Date start, Date end) {
+        return songRepository.findallDtoByCreatorAndTime(creator_id, start, end);
+    }
+
+    public List<SongDto> findTop6NewestDto() {
+        Pageable pageable = PageRequest.of(0, 6);
+        return songRepository.findTop6NewestDto(pageable);
     }
 }

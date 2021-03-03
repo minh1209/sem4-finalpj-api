@@ -55,27 +55,17 @@ public class API {
 
     //  User------------------------------------------------------------------------------------------------------------
     @GetMapping("/user/get")
-    public ResponseEntity<?> getUserById(@RequestParam String id) {
+    public ResponseEntity<?> getUser(@RequestParam(required = false, defaultValue = "") String id,
+                                     @RequestParam(required = false, defaultValue = "") String email,
+                                     @RequestParam(required = false, defaultValue = "") String username) {
         result = new HashMap<>();
-        Optional<User> user = userService.findById(id);
-        if (!user.isPresent()) {
-            result.put("message", "User is not existed.");
-        } else {
-            result.put("message", "ok");
-            result.put("data", user.get());
-        }
-        return ResponseEntity.ok(result);
-    }
-
-    @GetMapping("/user/get-username")
-    public ResponseEntity<?> getUserByUsername(@RequestParam String username) {
-        result = new HashMap<>();
-        Optional<User> user = userService.findByUsername(username);
-        if (!user.isPresent()) {
-            result.put("message", "User is not existed.");
-        } else {
-            result.put("message", "ok");
-            result.put("data", user.get());
+        result.put("message", "ok");
+        if (!id.isEmpty()) {
+            result.put("data", userService.findDtoById(id));
+        } else if (!email.isEmpty()) {
+            result.put("data", userService.findDtoByEmail(email));
+        } else if (!username.isEmpty()) {
+            result.put("data", userService.findDtoByUsername(username));
         }
         return ResponseEntity.ok(result);
     }
@@ -101,7 +91,7 @@ public class API {
                 result.put("message", "Admin account is not allowed.");
             } else {
                 result.put("message", "Log in successfully.");
-                result.put("data", user.get());
+                result.put("data", userService.findDtoByEmail(email));
             }
         }
         return ResponseEntity.ok(result);
@@ -245,51 +235,40 @@ public class API {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/user/top-20")
-    public ResponseEntity<?> getTop20() {
-        result = new HashMap<>();
-        result.put("message", "ok");
-        result.put("data", userService.findTop20UserGetPaid());
-        return ResponseEntity.ok(result);
-    }
-
     @GetMapping("/user/search")
     public ResponseEntity<?> userSearch(@RequestParam String username) {
         result = new HashMap<>();
         result.put("message", "ok");
-        result.put("data", userService.findAllByUsernameLike(username));
+        result.put("data", userService.findAllDtoByUsernameSearch(username));
         return ResponseEntity.ok(result);
     }
 
     //  Song------------------------------------------------------------------------------------------------------------
-    @GetMapping("/song/all")
-    public ResponseEntity<?> findAllSong(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size) {
-        result = new HashMap<>();
-        result.put("message", "ok");
-        result.put("data", songService.findAll(page, size));
-        return ResponseEntity.ok(result);
-    }
-
-    @GetMapping("/song/category")
-    public ResponseEntity<?> findAllSongCategoryName(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size, @RequestParam String category) {
-        result = new HashMap<>();
-        result.put("message", "ok");
-        result.put("data", songService.findAllByCategory_Name(page, size, category));
-        return ResponseEntity.ok(result);
-    }
-
     @GetMapping("/song/get")
-    public ResponseEntity<?> getSong(@RequestParam(required = false) String id) {
+    public ResponseEntity<?> getSongDto(@RequestParam(required = false, defaultValue = "") String id,
+                                        @RequestParam(required = false, defaultValue = "") String creator_id,
+                                        @RequestParam(required = false, defaultValue = "") String category_id) {
         result = new HashMap<>();
+        result.put("message", "ok");
+
         if (!id.isEmpty()) {
-            Optional<Song> song = songService.findById(id);
-            if (!song.isPresent()) {
-                result.put("message", "Beat is not existed.");
+            result.put("data", songService.findDtoById(id));
+        } else {
+            if (!creator_id.isEmpty()) {
+                if (!category_id.isEmpty()) {
+                    result.put("data", songService.findAllDtoByCreatorAndCategory(creator_id, category_id));
+                } else {
+                    result.put("data", songService.findAllDtoByCreator(creator_id));
+                }
             } else {
-                result.put("message", "ok");
-                result.put("data", song.get());
+                if (!category_id.isEmpty()) {
+                    result.put("data", songService.findAllDtoByCategory(category_id));
+                } else {
+                    result.put("data", songService.findAllDto());
+                }
             }
         }
+
         return ResponseEntity.ok(result);
     }
 
@@ -354,7 +333,7 @@ public class API {
     public ResponseEntity<?> getFirst6ByCreate() {
         result = new HashMap<>();
         result.put("message", "ok");
-        result.put("data", songService.findTop6ByOrderByCreate_atDesc());
+        result.put("data", songService.findTop6NewestDto());
         return ResponseEntity.ok(result);
     }
 
@@ -362,19 +341,11 @@ public class API {
     public ResponseEntity<?> songSearch(@RequestParam String name) {
         result = new HashMap<>();
         result.put("message", "ok");
-        result.put("data", songService.findAllByNameLike(name));
+        result.put("data", songService.findAllDtoBySearchName(name));
         return ResponseEntity.ok(result);
     }
 
     //  Category--------------------------------------------------------------------------------------------------------
-    @GetMapping("/category/all")
-    public ResponseEntity<?> getAll() {
-        result = new HashMap<>();
-        result.put("message", "ok");
-        result.put("data", categoryService.findAll());
-        return ResponseEntity.ok(result);
-    }
-
     @PostMapping("/category/add")
     public ResponseEntity<?> addCategory(@RequestBody @Valid Category c, BindingResult bindingResult) {
         result = new HashMap<>();
@@ -388,41 +359,41 @@ public class API {
     }
 
     @GetMapping("/category/get")
-    public ResponseEntity<?> getCategoryById(@RequestParam String id) {
+    public ResponseEntity<?> getCategoryDto(@RequestParam(required = false, defaultValue = "") String id) {
         result = new HashMap<>();
-        Optional<Category> category = categoryService.findById(id);
-        if (!category.isPresent()) {
-            result.put("message", "Category is not existed.");
+        result.put("message", "ok");
+
+        if (!id.isEmpty()) {
+            result.put("data", categoryService.findDtoById(id));
         } else {
-            result.put("message", "ok");
-            result.put("data", category.get());
+            result.put("data", categoryService.findAllDto());
         }
         return ResponseEntity.ok(result);
     }
 
-
     //  Transaction-----------------------------------------------------------------------------------------------------
-    @GetMapping("/transaction/customer")
-    public ResponseEntity<?> getAllTransactionWithCustomer(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size, @RequestParam String id) {
-        result = new HashMap<>();
-        result.put("message", "ok");
-        result.put("data", transactionService.findAllByCustomerIdOrderByCreateAtDesc(id, page, size));
-        return ResponseEntity.ok(result);
-    }
-
-    @GetMapping("/transaction/song")
-    public ResponseEntity<?> getAllTransactionWithSong(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size, @RequestParam String id) {
-        result = new HashMap<>();
-        result.put("message", "ok");
-        result.put("data", transactionService.findAllBySongIdOrderByCreateAtDesc(id, page, size));
-        return ResponseEntity.ok(result);
-    }
-
     @GetMapping("/transaction/get")
-    public ResponseEntity<?> getTransactionById(@RequestParam String id) {
+    public ResponseEntity<?> getTransactions(@RequestParam(required = false, defaultValue = "") String id,
+                                             @RequestParam(required = false, defaultValue = "") String creator_id,
+                                             @RequestParam(required = false, defaultValue = "") String song_id,
+                                             @RequestParam(required = false, defaultValue = "") String customer_id,
+                                             @RequestParam(required = false, defaultValue = "") @DateTimeFormat(pattern = "yyyy-MM-dd") Date start,
+                                             @RequestParam(required = false, defaultValue = "") @DateTimeFormat(pattern = "yyyy-MM-dd") Date end) {
         result = new HashMap<>();
         result.put("message", "ok");
-        result.put("data", transactionService.findById(id));
+        if (!id.isEmpty()) {
+            result.put("data", transactionService.findDtoById(id));
+        } else {
+            if (!creator_id.isEmpty()) {
+                result.put("data", transactionService.findAllDtoByCreatorAndTime(creator_id, start, end));
+            } else if (!song_id.isEmpty()) {
+                result.put("data", transactionService.findAllDtoBySongAndTime(song_id, start, end));
+            } else if (!customer_id.isEmpty()) {
+                result.put("data", transactionService.findAllDtoByCustomerAndTime(customer_id, start, end));
+            } else {
+                result.put("data", null);
+            }
+        }
         return ResponseEntity.ok(result);
     }
 
@@ -447,10 +418,10 @@ public class API {
 
     //  Admin-----------------------------------------------------------------------------------------------------------
     @PostMapping("/admin/login")
-    public ResponseEntity<?> adminLogin(@RequestParam String email, @RequestParam String password) {
+    public ResponseEntity<?> adminLogin(@RequestParam String username, @RequestParam String password) {
         result = new HashMap<>();
         boolean isAdmin = false;
-        Optional<User> user = userService.findByEmail(email);
+        Optional<User> user = userService.findByUsername(username);
         if (!user.isPresent()) {
             result.put("message", "User is not existed.");
         } else if (!user.get().getActive()) {
@@ -473,14 +444,11 @@ public class API {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/admin/user/all")
-//    public ResponseEntity<?> findAllUser(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size) {
-    public ResponseEntity<?> findAllUser() {
+    @GetMapping("/admin/user/get")
+    public ResponseEntity<?> adminGetUserDto() {
         result = new HashMap<>();
         result.put("message", "ok");
-//        result.put("data", userService.findAll(page, size));
-//        result.put("data", userService.findAll());
-        result.put("data", userService.findAllUserNotAdmin());
+        result.put("data", userService.findAllDtoNotAdmin());
         return ResponseEntity.ok(result);
     }
 
@@ -497,31 +465,34 @@ public class API {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/admin/transaction/all")
-    public ResponseEntity<?> findAllTransaction(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size) {
+    @GetMapping("/admin/song/get")
+    public ResponseEntity<?> adminGetSongDto(@RequestParam(required = false, defaultValue = "") String creator_id,
+                                             @RequestParam(required = false, defaultValue = "") String category_id,
+                                             @RequestParam java.sql.Date start, @RequestParam java.sql.Date end) {
         result = new HashMap<>();
         result.put("message", "ok");
-        result.put("data", transactionService.findAll(page, size));
-        return ResponseEntity.ok(result);
-    }
-
-    @GetMapping("/admin/song/revenue-category")
-    public ResponseEntity<?> findAllSongByCategoryAndTime(@RequestParam String id, @RequestParam java.sql.Date start, @RequestParam java.sql.Date end) {
-        result = new HashMap<>();
-        result.put("message", "ok");
-        result.put("data", songService.findAllByCategoryIdAndTransactions_CreateAtBetween(id, start, end));
-        return ResponseEntity.ok(result);
-    }
-
-    @GetMapping("/admin/transaction/timefilter")
-    public ResponseEntity<?> findAllTransactionWithTimeFilter(@RequestParam(required = false) String id, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date start, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date end) {
-        result = new HashMap<>();
-        result.put("message", "ok");
-        if (id == null) {
-            result.put("data", transactionService.findAllByCreateAtBetweenOrderByCreateAtDesc(start, end));
+        if(!creator_id.isEmpty()) {
+            if(!category_id.isEmpty()) {
+                result.put("data", songService.findAllDtoByCreatorAndCategoryAndTime(creator_id, category_id, start, end));
+            } else {
+                result.put("data", songService.findallDtoByCreatorAndTime(creator_id, start, end));
+            }
         } else {
-            result.put("data", transactionService.findAllBySong_Creator_IdAndCreateAtBetweenOrderByCreateAtDesc(start, end, id));
+            if(!category_id.isEmpty()) {
+                result.put("data", songService.findallDtoByCategoryAndTime(category_id, start, end));
+            } else {
+                result.put("data", null);
+            }
         }
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/admin/transaction/get")
+    public ResponseEntity<?> adminGetTransactions(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date start,
+                                                  @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date end) {
+        result = new HashMap<>();
+        result.put("message", "ok");
+        result.put("data", transactionService.findAllDtoByTime(start, end));
         return ResponseEntity.ok(result);
     }
 
