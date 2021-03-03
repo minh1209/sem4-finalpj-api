@@ -273,6 +273,15 @@ public class API {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/song/get/category-transaction")
+    public ResponseEntity<?> getSongDtoTransactions(@RequestParam String category_id,
+                                                    @RequestParam java.sql.Date start, @RequestParam java.sql.Date end) {
+        result = new HashMap<>();
+        result.put("message", "ok");
+        result.put("data", songService.findallDtoByCategoryAndTransactionTime(category_id, start, end));
+        return ResponseEntity.ok(result);
+    }
+
     @PutMapping("/song/edit")
     public ResponseEntity<?> editSong(@RequestParam String id, @Valid @RequestBody Song s, BindingResult bindingResult) {
         result = new HashMap<>();

@@ -72,4 +72,8 @@ public class SongService {
         Pageable pageable = PageRequest.of(0, 6);
         return songRepository.findTop6NewestDto(pageable);
     }
+
+    public List<SongDto> findallDtoByCategoryAndTransactionTime(String category_id, Date start, Date end) {
+        return songRepository.findallDtoByCategoryAndTransactionTime(category_id, start, end);
+    }
 }

@@ -45,6 +45,10 @@ public interface SongRepository extends JpaRepository<Song, String> {
             "and (s.createAt between ?2 and ?3) order by s.createAt desc")
     List<SongDto> findallDtoByCreatorAndTime(String creator_id, Date start, Date end);
 
+    @Query(value = "select s from Song s inner join Transaction t on s.id = t.song.id where s.category.id = ?1 " +
+            "and (t.createAt between ?2 and ?3) order by s.createAt desc")
+    List<SongDto> findallDtoByCategoryAndTransactionTime(String category_id, Date start, Date end);
+
     @Query(
             value = "select s from Song s order by s.createAt desc",
             countQuery = "select count(s) from Song s"
