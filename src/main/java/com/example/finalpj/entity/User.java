@@ -11,7 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -35,7 +35,7 @@ public class User {
     private String username;
 
     @DateTimeFormat
-    private Date dob;
+    private java.sql.Date dob;
     private String phone;
     private String identification;
     private Boolean active = false;

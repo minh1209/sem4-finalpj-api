@@ -275,7 +275,8 @@ public class API {
 
     @GetMapping("/song/get/category-transaction")
     public ResponseEntity<?> getSongDtoTransactions(@RequestParam String category_id,
-                                                    @RequestParam java.sql.Date start, @RequestParam java.sql.Date end) {
+                                                    @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date start,
+                                                    @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date end) {
         result = new HashMap<>();
         result.put("message", "ok");
         result.put("data", songService.findallDtoByCategoryAndTransactionTime(category_id, start, end));
@@ -479,8 +480,8 @@ public class API {
     }
 
     @GetMapping("/admin/user/get")
-    public ResponseEntity<?> adminGetUserDto(@RequestParam(required = false, defaultValue = "") java.sql.Date start,
-                                             @RequestParam(required = false, defaultValue = "") java.sql.Date end) {
+    public ResponseEntity<?> adminGetUserDto(@RequestParam(required = false, defaultValue = "") @DateTimeFormat(pattern = "yyyy-MM-dd") Date start,
+                                             @RequestParam(required = false, defaultValue = "") @DateTimeFormat(pattern = "yyyy-MM-dd") Date end) {
         result = new HashMap<>();
         result.put("message", "ok");
         if(start == null || end == null) {
@@ -507,7 +508,8 @@ public class API {
     @GetMapping("/admin/song/get")
     public ResponseEntity<?> adminGetSongDto(@RequestParam(required = false, defaultValue = "") String creator_id,
                                              @RequestParam(required = false, defaultValue = "") String category_id,
-                                             @RequestParam java.sql.Date start, @RequestParam java.sql.Date end) {
+                                             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date start,
+                                             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date end) {
         result = new HashMap<>();
         result.put("message", "ok");
         if (!creator_id.isEmpty()) {
