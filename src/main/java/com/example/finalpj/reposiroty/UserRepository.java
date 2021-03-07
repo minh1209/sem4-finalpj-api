@@ -22,6 +22,9 @@ public interface UserRepository extends JpaRepository<User, String> {
     @Query(value = "select u from User u where u.roles.size < 2")
     List<UserDto> findAllDtoNotAdmin();
 
+    @Query(value = "select u from User u where u.roles.size < 2 and u.createAt between ?1 and ?2")
+    List<UserDto> findAllDtoNotAdminAndTime(Date start, Date end);
+
     @Query(value = "select u from User u where lower(trim(u.username)) like %?1%")
     List<UserDto> findAllDtoByUsernameSearch(String username);
 

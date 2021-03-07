@@ -479,10 +479,15 @@ public class API {
     }
 
     @GetMapping("/admin/user/get")
-    public ResponseEntity<?> adminGetUserDto() {
+    public ResponseEntity<?> adminGetUserDto(@RequestParam(required = false, defaultValue = "") java.sql.Date start,
+                                             @RequestParam(required = false, defaultValue = "") java.sql.Date end) {
         result = new HashMap<>();
         result.put("message", "ok");
-        result.put("data", userService.findAllDtoNotAdmin());
+        if(start == null || end == null) {
+            result.put("data", userService.findAllDtoNotAdmin());
+        } else {
+            result.put("data", userService.findAllDtoNotAdminAndTime(start, end));
+        }
         return ResponseEntity.ok(result);
     }
 

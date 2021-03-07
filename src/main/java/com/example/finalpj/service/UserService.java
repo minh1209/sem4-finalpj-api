@@ -44,6 +44,10 @@ public class UserService {
         return userRepository.findAllDtoNotAdmin();
     }
 
+    public List<UserDto> findAllDtoNotAdminAndTime(Date start, Date end) {
+        return userRepository.findAllDtoNotAdminAndTime(start, end);
+    }
+
     public List<UserDto> findAllDtoByUsernameSearch(String username) {
         return userRepository.findAllDtoByUsernameSearch(username);
     }
