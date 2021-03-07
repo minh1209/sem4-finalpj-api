@@ -60,17 +60,33 @@ public class TransactionService {
         return transactionRepository.findAllDtoByTime(start, end);
     }
 
+
+    public List<TransactionDto> findAllDtoByCreator(String creator_id) {
+        return transactionRepository.findAllDtoByCreator(creator_id);
+    }
+
     public List<TransactionDto> findAllDtoByCreatorAndTime(String creator_id, Date start, Date end) {
         return transactionRepository.findAllDtoByCreatorAndTime(creator_id, start, end);
+    }
+
+
+    public List<TransactionDto> findAllDtoBySong(String song_id) {
+        return transactionRepository.findAllDtoBySong(song_id);
     }
 
     public List<TransactionDto> findAllDtoBySongAndTime(String song_id, Date start, Date end) {
         return transactionRepository.findAllDtoBySongAndTime(song_id, start, end);
     }
 
+
+    public List<TransactionDto> findAllDtoByCustomer(String customer_id) {
+        return transactionRepository.findAllDtoByCustomer(customer_id);
+    }
+
     public List<TransactionDto> findAllDtoByCustomerAndTime(String customer_id, Date start, Date end) {
         return transactionRepository.findAllDtoByCustomerAndTime(customer_id, start, end);
     }
+
 
     public Optional<TransactionChildrenDto> checkUserPurchasedSong(String customer_id, String song_id) {
         return transactionRepository.checkUserPurchasedSong(customer_id, song_id);

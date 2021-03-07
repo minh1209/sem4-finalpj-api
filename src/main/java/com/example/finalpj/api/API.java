@@ -395,11 +395,23 @@ public class API {
             result.put("data", transactionService.findDtoById(id));
         } else {
             if (!creator_id.isEmpty()) {
-                result.put("data", transactionService.findAllDtoByCreatorAndTime(creator_id, start, end));
+                if (start == null || end == null) {
+                    result.put("data", transactionService.findAllDtoByCreator(creator_id));
+                } else {
+                    result.put("data", transactionService.findAllDtoByCreatorAndTime(creator_id, start, end));
+                }
             } else if (!song_id.isEmpty()) {
-                result.put("data", transactionService.findAllDtoBySongAndTime(song_id, start, end));
+                if (start == null || end == null) {
+                    result.put("data", transactionService.findAllDtoBySong(song_id));
+                } else {
+                    result.put("data", transactionService.findAllDtoBySongAndTime(song_id, start, end));
+                }
             } else if (!customer_id.isEmpty()) {
-                result.put("data", transactionService.findAllDtoByCustomerAndTime(customer_id, start, end));
+                if (start == null || end == null) {
+                    result.put("data", transactionService.findAllDtoByCustomer(customer_id));
+                } else {
+                    result.put("data", transactionService.findAllDtoByCustomerAndTime(customer_id, start, end));
+                }
             } else {
                 result.put("data", null);
             }
@@ -493,14 +505,14 @@ public class API {
                                              @RequestParam java.sql.Date start, @RequestParam java.sql.Date end) {
         result = new HashMap<>();
         result.put("message", "ok");
-        if(!creator_id.isEmpty()) {
-            if(!category_id.isEmpty()) {
+        if (!creator_id.isEmpty()) {
+            if (!category_id.isEmpty()) {
                 result.put("data", songService.findAllDtoByCreatorAndCategoryAndTime(creator_id, category_id, start, end));
             } else {
                 result.put("data", songService.findallDtoByCreatorAndTime(creator_id, start, end));
             }
         } else {
-            if(!category_id.isEmpty()) {
+            if (!category_id.isEmpty()) {
                 result.put("data", songService.findallDtoByCategoryAndTime(category_id, start, end));
             } else {
                 result.put("data", null);

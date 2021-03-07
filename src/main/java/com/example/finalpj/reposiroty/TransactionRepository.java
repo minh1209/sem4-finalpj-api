@@ -31,14 +31,27 @@ public interface TransactionRepository extends JpaRepository<Transaction, String
     @Query(value = "select t from Transaction t where t.createAt between ?1 and ?2 order by t.createAt desc")
     List<TransactionDto> findAllDtoByTime(Date start, Date end);
 
+
+    @Query(value = "select t from Transaction t where t.song.creator.id = ?1 order by t.createAt desc")
+    List<TransactionDto> findAllDtoByCreator(String creator_id);
+
     @Query(value = "select t from Transaction t where t.song.creator.id = ?1 and (t.createAt between ?2 and ?3) order by t.createAt desc")
     List<TransactionDto> findAllDtoByCreatorAndTime(String creator_id, Date start, Date end);
+
+
+    @Query(value = "select t from Transaction t where t.song.id = ?1 order by t.createAt desc")
+    List<TransactionDto> findAllDtoBySong(String song_id);
 
     @Query(value = "select t from Transaction t where t.song.id = ?1 and (t.createAt between ?2 and ?3) order by t.createAt desc")
     List<TransactionDto> findAllDtoBySongAndTime(String song_id, Date start, Date end);
 
+
+    @Query(value = "select t from Transaction t where t.customer.id = ?1 order by t.createAt desc")
+    List<TransactionDto> findAllDtoByCustomer(String customer_id);
+
     @Query(value = "select t from Transaction t where t.customer.id = ?1 and (t.createAt between ?2 and ?3) order by t.createAt desc")
     List<TransactionDto> findAllDtoByCustomerAndTime(String customer_id, Date start, Date end);
+
 
     @Query(value = "select t from Transaction t where t.customer.id = ?1 and t.song.id = ?2")
     Optional<TransactionChildrenDto> checkUserPurchasedSong(String customer_id, String song_id);
