@@ -21,7 +21,7 @@ public interface SongRepository extends JpaRepository<Song, String> {
 
     @Query(
             value = "select s from Song s order by s.createAt desc",
-            countQuery = "select count(s) from Song s"
+            countQuery = "select count(s) from Song s order by s.createAt desc"
     )
     List<SongDto> findAllDtoPage(Pageable pageable);
 
