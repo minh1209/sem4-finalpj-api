@@ -19,17 +19,46 @@ public interface SongRepository extends JpaRepository<Song, String> {
     @Query(value = "select s from Song s order by s.createAt desc")
     List<SongDto> findAllDto();
 
+    @Query(
+            value = "select s from Song s order by s.createAt desc",
+            countQuery = "select count(s) from Song s"
+    )
+    List<SongDto> findAllDtoPage(Pageable pageable);
+
+
     @Query(value = "select s from Song s where s.id = ?1 order by s.createAt desc")
     SongDto findDtoById(String id);
+
 
     @Query(value = "select s from Song s where s.creator.id = ?1 order by s.createAt desc")
     List<SongDto> findAllDtoByCreator(String creator_id);
 
+    @Query(
+            value = "select s from Song s where s.creator.id = ?1 order by s.createAt desc",
+            countQuery = "select count(s) from Song s where s.creator.id = ?1 order by s.createAt desc"
+    )
+    List<SongDto> findAllDtoByCreatorPage(String creator_id, Pageable pageable);
+
+
     @Query(value = "select s from Song s where s.category.id = ?1 order by s.createAt desc")
     List<SongDto> findAllDtoByCategory(String category_id);
 
+    @Query(
+            value = "select s from Song s where s.category.id = ?1 order by s.createAt desc",
+            countQuery = "select count(s) from Song s where s.category.id = ?1 order by s.createAt desc"
+    )
+    List<SongDto> findAllDtoByCategoryPage(String category_id, Pageable pageable);
+
+
     @Query(value = "select s from Song s where s.creator.id = ?1 and s.category.id = ?2 order by s.createAt desc")
     List<SongDto> findAllDtoByCreatorAndCategory(String creator_id, String category_id);
+
+    @Query(
+            value = "select s from Song s where s.creator.id = ?1 and s.category.id = ?2 order by s.createAt desc",
+            countQuery = "select count(s) from Song s where s.creator.id = ?1 and s.category.id = ?2 order by s.createAt desc"
+    )
+    List<SongDto> findAllDtoByCreatorAndCategoryPage(String creator_id, String category_id, Pageable pageable);
+
 
     @Query(value = "select s from Song s where (s.creator.id = ?1 and s.category.id = ?2) and s.createAt between ?3 and ?4 order by s.createAt desc")
     List<SongDto> findAllDtoByCreatorAndCategoryAndTime(String creator_id, String category_id, Date start, Date end);

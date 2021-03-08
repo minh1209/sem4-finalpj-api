@@ -36,21 +36,46 @@ public class SongService {
         return songRepository.findAllDto();
     }
 
+    public List<SongDto> findAllDtoPage(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return songRepository.findAllDtoPage(pageable);
+    }
+
+
     public List<SongDto> findAllDtoByCreator(String creator_id) {
         return songRepository.findAllDtoByCreator(creator_id);
     }
+
+    public List<SongDto> findAllDtoByCreatorPage(String creator_id, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return songRepository.findAllDtoByCreatorPage(creator_id, pageable);
+    }
+
 
     public SongDto findDtoById(String id) {
         return songRepository.findDtoById(id);
     }
 
+
     public List<SongDto> findAllDtoByCategory(String category_id) {
         return songRepository.findAllDtoByCategory(category_id);
     }
 
+    public List<SongDto> findAllDtoByCategoryPage(String category_id, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return songRepository.findAllDtoByCategoryPage(category_id, pageable);
+    }
+
+
     public List<SongDto> findAllDtoByCreatorAndCategory(String creator_id, String category_id) {
         return songRepository.findAllDtoByCreatorAndCategory(creator_id, category_id);
     }
+
+    public List<SongDto> findAllDtoByCreatorAndCategoryPage(String creator_id, String category_id, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return songRepository.findAllDtoByCreatorAndCategoryPage(creator_id, category_id, pageable);
+    }
+
 
     public List<SongDto> findAllDtoByCreatorAndCategoryAndTime(String creator_id, String category_id, Date start, Date end) {
         return songRepository.findAllDtoByCreatorAndCategoryAndTime(creator_id, category_id, start, end);

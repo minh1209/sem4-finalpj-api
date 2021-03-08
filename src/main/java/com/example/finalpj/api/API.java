@@ -273,6 +273,31 @@ public class API {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/song/get-pageable")
+    public ResponseEntity<?> getSongDtoPageable(@RequestParam(required = false, defaultValue = "") String creator_id,
+                                                @RequestParam(required = false, defaultValue = "") String category_id,
+                                                @RequestParam(required = false, defaultValue = "0") Integer page,
+                                                @RequestParam(required = false, defaultValue = "5") Integer size) {
+        result = new HashMap<>();
+        result.put("message", "ok");
+
+        if (!creator_id.isEmpty()) {
+            if (!category_id.isEmpty()) {
+                result.put("data", songService.findAllDtoByCreatorAndCategoryPage(creator_id, category_id, page, size));
+            } else {
+                result.put("data", songService.findAllDtoByCreatorPage(creator_id, page, size));
+            }
+        } else {
+            if (!category_id.isEmpty()) {
+                result.put("data", songService.findAllDtoByCategoryPage(category_id, page, size));
+            } else {
+                result.put("data", songService.findAllDtoPage(page, size));
+            }
+        }
+
+        return ResponseEntity.ok(result);
+    }
+
     @GetMapping("/song/get/category-transaction")
     public ResponseEntity<?> getSongDtoTransactions(@RequestParam String category_id,
                                                     @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date start,
