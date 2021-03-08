@@ -564,6 +564,7 @@ public class API {
 
     @PutMapping("/admin/transaction/author-payment")
     public ResponseEntity<?> updateAuthorPayment(@RequestParam String id) {
+        result = new HashMap<>();
         Optional<Transaction> transaction = transactionService.findById(id);
         if (!transaction.isPresent()) {
             result.put("message", "Transaction is not existed.");
