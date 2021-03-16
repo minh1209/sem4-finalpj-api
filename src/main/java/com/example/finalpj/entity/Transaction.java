@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -23,6 +24,9 @@ public class Transaction {
     @CreationTimestamp
     private Date createAt;
 
+    @UpdateTimestamp
+    private Date updateAt;
+
     @ManyToOne
     @JsonIgnoreProperties("transactions")
     private Song song;
@@ -30,4 +34,9 @@ public class Transaction {
     @ManyToOne
     @JsonIgnoreProperties({"transactions", "songs"})
     private User customer;
+
+    @OneToOne
+    @JsonIgnoreProperties({"transactions", "songs", "token", "roles"})
+    private User handler;
+
 }

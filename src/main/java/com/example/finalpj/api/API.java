@@ -563,7 +563,7 @@ public class API {
     }
 
     @PutMapping("/admin/transaction/author-payment")
-    public ResponseEntity<?> updateAuthorPayment(@RequestParam String id) {
+    public ResponseEntity<?> updateAuthorPayment(@RequestParam String id, @RequestBody User handler) {
         result = new HashMap<>();
         Optional<Transaction> transaction = transactionService.findById(id);
         if (!transaction.isPresent()) {
@@ -572,6 +572,7 @@ public class API {
             result.put("message", "Transaction has already been paid to musician.");
         } else {
             transaction.get().setAuthorPayment(true);
+            transaction.get().setHandler(handler);
             transactionService.save(transaction.get());
             result.put("message", "Transaction is paid successfully.");
         }
