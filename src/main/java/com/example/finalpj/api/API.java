@@ -509,7 +509,7 @@ public class API {
                                              @RequestParam(required = false, defaultValue = "") @DateTimeFormat(pattern = "yyyy-MM-dd") Date end) {
         result = new HashMap<>();
         result.put("message", "ok");
-        if(start == null || end == null) {
+        if (start == null || end == null) {
             result.put("data", userService.findAllDtoNotAdmin());
         } else {
             result.put("data", userService.findAllDtoNotAdminAndTime(start, end));
@@ -563,18 +563,23 @@ public class API {
     }
 
     @PutMapping("/admin/transaction/author-payment")
-    public ResponseEntity<?> updateAuthorPayment(@RequestParam String id, @RequestBody User handler) {
+    public ResponseEntity<?> updateAuthorPayment(@RequestParam String id, @RequestParam String handler_id) {
         result = new HashMap<>();
         Optional<Transaction> transaction = transactionService.findById(id);
+        Optional<User> user = userService.findById(handler_id);
         if (!transaction.isPresent()) {
             result.put("message", "Transaction is not existed.");
         } else if (transaction.get().getAuthorPayment()) {
             result.put("message", "Transaction has already been paid to musician.");
         } else {
-            transaction.get().setAuthorPayment(true);
-            transaction.get().setHandler(handler);
-            transactionService.save(transaction.get());
-            result.put("message", "Transaction is paid successfully.");
+            if (!user.isPresent()) {
+                result.put("message", "Admin not found.");
+            } else {
+                transaction.get().setAuthorPayment(true);
+                transaction.get().setHandler(user.get());
+                transactionService.save(transaction.get());
+                result.put("message", "Transaction is paid successfully.");
+            }
         }
         return ResponseEntity.ok(result);
     }
