@@ -9,4 +9,5 @@ public interface TransactionDto {
     Date getCreateAt();
     SongChildrenDto getSong();
     UserChildrenDto getCustomer();
+    UserChildrenDto getHandler();
 }
