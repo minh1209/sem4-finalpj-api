@@ -642,8 +642,8 @@ public class API {
             map.put("client_email", customer.getEmail());
             map.put("client_phone", customer.getPhone());
             map.put("track_name", song.getName());
-            map.put("track_price", song.getPrice().multiply(new BigDecimal("0.95")).toString());
-            map.put("track_subprice", song.getPrice().multiply(new BigDecimal("0.95")).toString());
+            map.put("track_price", song.getPrice().multiply(new BigDecimal("0.95")).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+            map.put("track_subprice", song.getPrice().multiply(new BigDecimal("0.95")).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
             map.put("track_fee", song.getPrice().multiply(new BigDecimal("0.05")).toString());
             body = FreeMarkerTemplateUtils.processTemplateIntoString(t, map);
         } catch (IOException | TemplateException e) {
