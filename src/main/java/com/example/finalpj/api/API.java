@@ -666,7 +666,7 @@ public class API {
             message.setSubject(subject);
             message.setContent(body, "text/html");
             Transport transport = session.getTransport();
-            transport.connect("smtp.gmail.com", "starsecurities1@gmail.com", "Starsecurity@123");
+            transport.connect("smtp.gmail.com", "starsecurities1@gmail.com", "dmgoogle123!");
             transport.sendMessage(message, message.getAllRecipients());
         } catch (MessagingException | UnsupportedEncodingException e) {
             e.printStackTrace();
