@@ -25,6 +25,7 @@ import javax.mail.internet.MimeMessage;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -456,6 +457,7 @@ public class API {
             result.put("status", false);
         } else {
             transactionService.save(t);
+            sendBillMail(user.get(), song.get(), t);
             result.put("message", "Transaction successfully.");
             result.put("status", true);
         }
@@ -627,15 +629,35 @@ public class API {
         sendMail(toEmail, subject, body);
     }
 
+    private void sendBillMail(User customer, Song song, Transaction transaction) {
+        String subject = "Bill Order";
+        String body = "";
+        try {
+            Template t = template.getTemplate("email-billorder.ftl");
+            Map<String, String> map = new HashMap<>();
+            map.put("invoice_no", transaction.getId());
+            map.put("invoice_date", transaction.getCreateAt().toString());
+            map.put("amount_due", song.getPrice().toString());
+            map.put("client_username", customer.getUsername());
+            map.put("client_email", customer.getEmail());
+            map.put("track_name", song.getName());
+            map.put("track_price", song.getPrice().multiply(new BigDecimal("0.95")).toString());
+            map.put("track_subprice", song.getPrice().multiply(new BigDecimal("0.95")).toString());
+            map.put("track_fee", song.getPrice().multiply(new BigDecimal("0.05")).toString());
+            body = FreeMarkerTemplateUtils.processTemplateIntoString(t, map);
+        } catch (IOException | TemplateException e) {
+            e.printStackTrace();
+        }
+        sendMail(customer.getEmail(), subject, body);
+    }
+
     private void sendMail(String toEmail, String subject, String body) {
         Properties properties = System.getProperties();
         properties.put("mail.transport.protocol", "smtp");
         properties.put("mail.smtp.port", "587");
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.auth", "true");
-//        properties.put("mail.debug", "true");
         Session session = Session.getDefaultInstance(properties);
-//        session.setDebug(true);
         MimeMessage message = new MimeMessage(session);
         try {
             message.setFrom(new InternetAddress("starsecurities1@gmail.com", "FPT-Aptech-T1811E"));
