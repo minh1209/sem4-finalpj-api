@@ -130,24 +130,31 @@ public class API {
     @PostMapping("/user/register")
     public ResponseEntity<?> register(@Valid @RequestBody User u, BindingResult bindingResult) {
         result = new HashMap<>();
+        Optional<User> user = userService.findByEmail(u.getEmail());
+        Optional<User> user1 = userService.findByUsername(u.getUsername());
         if (bindingResult.hasErrors()) {
             result.put("message", "Wrong information.");
         } else {
-            u.setPassword(encoder().encode(u.getPassword()));
-            Optional<Role> role = roleService.findByName("role_user");
-            List<Role> roles = new ArrayList<>();
-            if (!role.isPresent()) {
-                Role new_role = new Role();
-                new_role.setName("role_user");
-                roles.add(roleService.save(new_role));
+            if (user.isPresent() || user1.isPresent()) {
+                result.put("message", "User is existed.");
             } else {
-                roles.add(role.get());
-            }
-            u.setRoles(roles);
+                u.setUsername(u.getUsername().toLowerCase().trim());
+                u.setPassword(encoder().encode(u.getPassword()));
+                Optional<Role> role = roleService.findByName("role_user");
+                List<Role> roles = new ArrayList<>();
+                if (!role.isPresent()) {
+                    Role new_role = new Role();
+                    new_role.setName("role_user");
+                    roles.add(roleService.save(new_role));
+                } else {
+                    roles.add(role.get());
+                }
+                u.setRoles(roles);
 
-            result.put("data", userService.save(u));
-            result.put("message", "Registration successfully.");
-            createVerification(u.getEmail());
+                result.put("data", userService.save(u));
+                result.put("message", "Registration successfully.");
+                createVerification(u.getEmail());
+            }
         }
         return ResponseEntity.ok(result);
     }
