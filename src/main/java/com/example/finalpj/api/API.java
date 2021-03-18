@@ -640,6 +640,7 @@ public class API {
             map.put("amount_due", song.getPrice().toString());
             map.put("client_username", customer.getUsername());
             map.put("client_email", customer.getEmail());
+            map.put("client_phone", customer.getPhone());
             map.put("track_name", song.getName());
             map.put("track_price", song.getPrice().multiply(new BigDecimal("0.95")).toString());
             map.put("track_subprice", song.getPrice().multiply(new BigDecimal("0.95")).toString());
