@@ -7,6 +7,7 @@ public interface TransactionDto {
     String getPayment();
     Boolean getAuthorPayment();
     Date getCreateAt();
+    Date getUpdateAt();
     SongChildrenDto getSong();
     UserChildrenDto getCustomer();
     UserChildrenDto getHandler();
