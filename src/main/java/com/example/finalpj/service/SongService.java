@@ -30,10 +30,16 @@ public class SongService {
     public Optional<Song> findById(String id) {
         return songRepository.findById(id);
     }
+    public List<Song> findAll() {
+        return songRepository.findAll();
+    }
 
     //    DTO
     public List<SongDto> findAllDto() {
         return songRepository.findAllDto();
+    }
+    public List<SongDto> findAllDtoStatusTrue() {
+        return songRepository.findAllDtoStatusTrue();
     }
 
     public List<SongDto> findAllDtoPage(Integer page, Integer size) {
@@ -79,6 +85,10 @@ public class SongService {
 
     public List<SongDto> findAllDtoByCreatorAndCategoryAndTime(String creator_id, String category_id, Date start, Date end) {
         return songRepository.findAllDtoByCreatorAndCategoryAndTime(creator_id, category_id, start, end);
+    }
+
+    public List<SongDto> findallDtoByTime(Date start, Date end) {
+        return songRepository.findallDtoByTime(start, end);
     }
 
     public List<SongDto> findAllDtoBySearchName(String name) {

@@ -26,10 +26,9 @@ public class Song {
     private String description;
     private Integer bpm;
     private BigDecimal price;
-
-
     private String main;
     private String demo;
+    private Boolean status = false;
 
     @UpdateTimestamp
     private Date updateAt;
@@ -37,7 +36,7 @@ public class Song {
     private Date createAt;
 
     @ManyToOne
-    @JsonIgnoreProperties({"songs", "transactions"})
+    @JsonIgnoreProperties({"songs", "transactions","roles","token"})
     private User creator;
 
     @ManyToOne

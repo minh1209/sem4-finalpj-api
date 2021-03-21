@@ -273,7 +273,7 @@ public class API {
                 if (!category_id.isEmpty()) {
                     result.put("data", songService.findAllDtoByCategory(category_id));
                 } else {
-                    result.put("data", songService.findAllDto());
+                    result.put("data", songService.findAllDtoStatusTrue());
                 }
             }
         }
@@ -327,6 +327,7 @@ public class API {
         } else {
             s.setId(id);
             s.setCreateAt(song.get().getCreateAt());
+            s.setStatus(song.get().getStatus());
             result.put("message", "Edit beat successfully.");
             result.put("data", songService.save(s));
         }
@@ -542,8 +543,8 @@ public class API {
     @GetMapping("/admin/song/get")
     public ResponseEntity<?> adminGetSongDto(@RequestParam(required = false, defaultValue = "") String creator_id,
                                              @RequestParam(required = false, defaultValue = "") String category_id,
-                                             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date start,
-                                             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date end) {
+                                             @RequestParam(required = false, defaultValue = "") @DateTimeFormat(pattern = "yyyy-MM-dd") Date start,
+                                             @RequestParam(required = false, defaultValue = "") @DateTimeFormat(pattern = "yyyy-MM-dd") Date end) {
         result = new HashMap<>();
         result.put("message", "ok");
         if (!creator_id.isEmpty()) {
@@ -556,7 +557,31 @@ public class API {
             if (!category_id.isEmpty()) {
                 result.put("data", songService.findallDtoByCategoryAndTime(category_id, start, end));
             } else {
-                result.put("data", null);
+                if(start == null && end == null) {
+                    result.put("data", songService.findAll());
+                } else if (start != null && end != null){
+                    result.put("data",  songService.findallDtoByTime(start, end));
+                } else {
+                    result.put("data", null);
+                }
+            }
+        }
+        return ResponseEntity.ok(result);
+    }
+
+    @DeleteMapping("/admin/song/active")
+    public ResponseEntity<?> activeSong(@RequestParam String id) {
+        result = new HashMap<>();
+        Optional<Song> song = songService.findById(id);
+        if (!song.isPresent()) {
+            result.put("message", "Track is not existed.");
+        } else {
+            if(song.get().getStatus()) {
+                result.put("message", "Track is already activated.");
+            } else {
+                result.put("message", "Track is activated successfully.");
+                song.get().setStatus(true);
+                result.put("data", songService.save(song.get()));
             }
         }
         return ResponseEntity.ok(result);
