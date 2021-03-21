@@ -569,7 +569,7 @@ public class API {
         return ResponseEntity.ok(result);
     }
 
-    @DeleteMapping("/admin/song/active")
+    @PutMapping("/admin/song/active")
     public ResponseEntity<?> activeSong(@RequestParam String id) {
         result = new HashMap<>();
         Optional<Song> song = songService.findById(id);
