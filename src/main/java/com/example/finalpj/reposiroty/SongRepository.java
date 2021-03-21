@@ -30,7 +30,7 @@ public interface SongRepository extends JpaRepository<Song, String> {
     List<SongDto> findAllDtoPage(Pageable pageable);
 
 
-    @Query(value = "select s from Song s where s.id = ?1 and s.status = true order by s.createAt desc")
+    @Query(value = "select s from Song s where s.id = ?1 order by s.createAt desc")
     SongDto findDtoById(String id);
 
 
