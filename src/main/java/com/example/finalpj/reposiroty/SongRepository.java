@@ -14,6 +14,7 @@ import java.util.List;
 
 public interface SongRepository extends JpaRepository<Song, String> {
     //    void deleteById(String id);
+    List<Song> findAllByOrderByCreateAtDesc();
 
     //    DTO
     @Query(value = "select s from Song s order by s.createAt desc")

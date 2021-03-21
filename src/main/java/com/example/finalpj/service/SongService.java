@@ -31,7 +31,7 @@ public class SongService {
         return songRepository.findById(id);
     }
     public List<Song> findAll() {
-        return songRepository.findAll();
+        return songRepository.findAllByOrderByCreateAtDesc();
     }
 
     //    DTO
