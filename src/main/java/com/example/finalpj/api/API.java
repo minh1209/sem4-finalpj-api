@@ -256,7 +256,8 @@ public class API {
     @GetMapping("/song/get")
     public ResponseEntity<?> getSongDto(@RequestParam(required = false, defaultValue = "") String id,
                                         @RequestParam(required = false, defaultValue = "") String creator_id,
-                                        @RequestParam(required = false, defaultValue = "") String category_id) {
+                                        @RequestParam(required = false, defaultValue = "") String category_id,
+                                        @RequestParam(required = false, defaultValue = "") String owner_id) {
         result = new HashMap<>();
         result.put("message", "ok");
 
@@ -267,7 +268,11 @@ public class API {
                 if (!category_id.isEmpty()) {
                     result.put("data", songService.findAllDtoByCreatorAndCategory(creator_id, category_id));
                 } else {
-                    result.put("data", songService.findAllDtoByCreator(creator_id));
+                    if(!owner_id.isEmpty()) {
+                        result.put("data", songService.findAllDtoByCreatorOwner(creator_id));
+                    } else {
+                        result.put("data", songService.findAllDtoByCreator(creator_id));
+                    }
                 }
             } else {
                 if (!category_id.isEmpty()) {

@@ -52,6 +52,10 @@ public class SongService {
         return songRepository.findAllDtoByCreator(creator_id);
     }
 
+    public List<SongDto> findAllDtoByCreatorOwner(String creator_id) {
+        return songRepository.findAllDtoByCreatorOwner(creator_id);
+    }
+
     public List<SongDto> findAllDtoByCreatorPage(String creator_id, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         return songRepository.findAllDtoByCreatorPage(creator_id, pageable);

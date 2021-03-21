@@ -37,6 +37,9 @@ public interface SongRepository extends JpaRepository<Song, String> {
     @Query(value = "select s from Song s where s.creator.id = ?1 and s.status = true order by s.createAt desc")
     List<SongDto> findAllDtoByCreator(String creator_id);
 
+    @Query(value = "select s from Song s where s.creator.id = ?1 order by s.createAt desc")
+    List<SongDto> findAllDtoByCreatorOwner(String creator_id);
+
     @Query(
             value = "select s from Song s where s.creator.id = ?1 and s.status = true order by s.createAt desc",
             countQuery = "select count(s) from Song s where s.creator.id = ?1 order by s.createAt desc"
