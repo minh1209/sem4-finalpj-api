@@ -557,10 +557,10 @@ public class API {
             if (!category_id.isEmpty()) {
                 result.put("data", songService.findallDtoByCategoryAndTime(category_id, start, end));
             } else {
-                if(start == null && end == null) {
+                if (start == null && end == null) {
                     result.put("data", songService.findAll());
-                } else if (start != null && end != null){
-                    result.put("data",  songService.findallDtoByTime(start, end));
+                } else if (start != null && end != null) {
+                    result.put("data", songService.findallDtoByTime(start, end));
                 } else {
                     result.put("data", null);
                 }
@@ -569,20 +569,16 @@ public class API {
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping("/admin/song/active")
+    @PutMapping("/admin/song/status")
     public ResponseEntity<?> activeSong(@RequestParam String id) {
         result = new HashMap<>();
         Optional<Song> song = songService.findById(id);
         if (!song.isPresent()) {
             result.put("message", "Track is not existed.");
         } else {
-            if(song.get().getStatus()) {
-                result.put("message", "Track is already activated.");
-            } else {
-                result.put("message", "Track is activated successfully.");
-                song.get().setStatus(true);
-                result.put("data", songService.save(song.get()));
-            }
+            result.put("message", "Change status successfully.");
+            song.get().setStatus(!song.get().getStatus());
+            result.put("data", songService.save(song.get()));
         }
         return ResponseEntity.ok(result);
     }
