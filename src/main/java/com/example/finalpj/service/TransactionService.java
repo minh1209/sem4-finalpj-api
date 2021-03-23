@@ -51,6 +51,10 @@ public class TransactionService {
         return transactionRepository.findBySongIdAndCustomerId(song_id, customer_id);
     }
 
+    public void delete(String id) {
+        transactionRepository.deleteById(id);
+    }
+
 //    DTO
     public TransactionDto findDtoById(String id) {
         return transactionRepository.findDtoById(id);

@@ -619,6 +619,18 @@ public class API {
         return ResponseEntity.ok(result);
     }
 
+    @DeleteMapping("/admin/transaction/delete")
+    public ResponseEntity<?> deleteTransaction(@RequestParam String id) {
+        result = new HashMap<>();
+        Optional<Transaction> transaction = transactionService.findById(id);
+        if(!transaction.isPresent()) {
+            result.put("message", "Transaction is not existed.");
+        } else {
+            transactionService.delete(id);
+            result.put("message", "Delete transaction successfully.");
+        }
+        return ResponseEntity.ok(result);
+    }
 
     //  Function--------------------------------------------------------------------------------------------------------
 
